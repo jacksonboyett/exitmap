@@ -40,13 +40,12 @@ import { useNavigate } from 'react-router-dom';
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  url: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Home', icon: FiHome, url: '' },
+  { name: 'Exits', icon: FiTrendingUp, url: 'exits'},
+  { name: 'Submit Exit', icon: FiCompass, url: 'submit' },
 ];
 
 export default function SidebarWithHeader({
@@ -93,6 +92,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   function returnDash() {
     navigate('/dash')
   }
+
+  function navigateTabs(url: any) {
+    console.log(url)
+    navigate(`/dash/${url}`)
+  }
+
   return (
     <Box
       transition="3s ease"
@@ -115,7 +120,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} onClick={() => navigateTabs(link.url)}>
           {link.name}
         </NavItem>
       ))}
@@ -222,7 +227,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2">
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">Luke Boyett</Text>
                   <Text fontSize="xs" color="gray.600">
                     Admin
                   </Text>
