@@ -24,7 +24,7 @@ function ExitCard(props: Partial<Props>) {
       <Text>
         {props.description}
       </Text>
-      <Text color='blue.600' fontSize='2xl'>
+      <Text color='green.400' fontSize='2xl'>
         {props.city}
       </Text>
     </Stack>
@@ -32,10 +32,10 @@ function ExitCard(props: Partial<Props>) {
   <Divider />
   <CardFooter>
     <ButtonGroup spacing='2'>
-      <Button variant='solid' colorScheme='blue'>
+      <Button variant='solid' bg='green.400' color='white'>
         View Exit
       </Button>
-      <Button variant='ghost' colorScheme='blue'>
+      <Button variant='ghost'  color='green.400'>
         Add to favorites
       </Button>
     </ButtonGroup>
