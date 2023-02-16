@@ -34,6 +34,7 @@ type FormData = {
   state: string;
   city: string;
   country: string;
+  image: string;
 };
 
 const INITIAL_DATA: FormData = {
@@ -47,21 +48,21 @@ const INITIAL_DATA: FormData = {
   state: '',
   city: '',
   country: '',
+  image: '',
 };
 
 type Form1Data = {
   name: string;
   type: string;
   description: string;
+  image: string;
 }
 
 type Form1Props = Form1Data & {
 	updateFields: (fields: Partial<Form1Data>) => void;
 };
 
-const Form1 = ({ name, type, description, updateFields }: Form1Props) => {
-  const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
+const Form1 = ({ name, type, description, image, updateFields }: Form1Props) => {
   return (
     <>
       <Heading w='100%' textAlign={'center'} fontWeight='normal' mb='2%'>
@@ -87,6 +88,12 @@ const Form1 = ({ name, type, description, updateFields }: Form1Props) => {
           </Select>
         </FormControl>
       </Flex>
+      <FormControl mr='5%'>
+          <FormLabel htmlFor='name' fontWeight={'normal'}>
+            Image link
+          </FormLabel>
+          <Input id='name' value={ image } onChange={e => updateFields({ image: e.target.value })}/>
+        </FormControl>
       <FormControl mt='2%'>
         <FormLabel htmlFor='description' fontWeight={'normal'}>
           Description
@@ -384,6 +391,7 @@ async function addExit(data: FormData) {
 				city: data.city, 
 				state: data.state, 
 				country: data.country,
+        image: data.image, 
 			}
 		})
 	} catch (err) {

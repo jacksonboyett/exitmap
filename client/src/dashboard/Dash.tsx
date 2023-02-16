@@ -36,6 +36,11 @@ import {
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SubmitExit from './tabs/SubmitExit';
+import DashHome from './tabs/DashHome';
+import Exits from './tabs/Exits';
+import Country from './tabs/countries/Country';
+import { Routes, Route } from 'react-router-dom'
 
 interface LinkItemProps {
   name: string;
@@ -76,7 +81,12 @@ export default function SidebarWithHeader({
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+        <Routes>
+          <Route path='*' element={<DashHome />} />
+          <Route path='exits/*' element={<Exits />} />
+          <Route path='country' element={<Country />} />
+          <Route path='submit' element={<SubmitExit />} />
+        </Routes>
       </Box>
     </Box>
   );
@@ -94,7 +104,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   }
 
   function navigateTabs(url: any) {
-    console.log(url)
     navigate(`/dash/${url}`)
   }
 

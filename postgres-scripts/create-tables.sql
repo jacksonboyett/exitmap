@@ -17,5 +17,6 @@ create table exits (
 	long real,
 	city varchar(255),
 	state varchar(255),
-	country varchar(255)
+	country varchar(255),
+	image varchar(500)
 );

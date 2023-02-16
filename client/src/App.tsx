@@ -24,13 +24,13 @@ function App() {
         <Route path='login' element={ <Login /> } />
         <Route path='signup' element={ <Signup /> } />
         <Route path='dash'>
-          <Route index path='' element={<Protected> <Dash children={ 'HOME' }/> </Protected>} />
-          <Route index path='exits' element={<Protected> <Dash children={ <Exits /> }/> </Protected>} />
-          <Route path='submit' element={<Protected> <Dash children={<SubmitExit />}/> </Protected>} />
+          <Route index path='*' element={<Protected> <Dash children={ 'HOME' }/> </Protected>} />
         </Route>
       </Routes>
     </ChakraProvider>
   );
 }
+
+// OUTLET DETERMINES THE OUTPUT OF THE ROUTE
 
 export default App;
