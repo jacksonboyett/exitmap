@@ -112,3 +112,17 @@ values
 		'https://image1.apartmentfinder.com/i2/FNfKeTxDHdwNA-oJbtp0hD_S5q3VxjnI8hllR_f7USg/111/icon-buckhead-atlanta-ga-highway-access.jpg',
 		'0'
 	);
+	
+
+insert into comments (text, user_id, exit_id) values 
+('This is a message on exit 1 made by user 1', 1, 1),
+('Cant wait to jump this one again!!', 4, 1),
+('Had a great time on this one!!', 1, 3),
+('Hell yeah- first comment!!!', 2, 2),
+('Been trying to jump this one for years now!!', 3, 4);
+
+
+
+
+
+
