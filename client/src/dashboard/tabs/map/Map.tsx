@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, MarkerF, InfoWindowF } from '@react-google-maps/api';
+import {
+  GoogleMap,
+  LoadScript,
+  MarkerF,
+  InfoWindowF,
+  useJsApiLoader,
+} from '@react-google-maps/api';
 import axios, { AxiosResponse } from 'axios';
 import uniqid from 'uniqid';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +15,7 @@ const center = {
   lng: -80,
 };
 
-function MyComponent() {
+export default function MyComponent() {
   const [data, setData] = useState<any[]>([]);
   const [array, setArray] = useState<any[][]>([]);
 
@@ -44,8 +50,17 @@ function MyComponent() {
     setArray(coordArray);
   }, [data]);
 
-  return (
-    <LoadScript googleMapsApiKey='AIzaSyAW6WMAp0goyYloDiY4mmurvcLjSo3AmHw'>
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyAW6WMAp0goyYloDiY4mmurvcLjSo3AmHw',
+    libraries: ['geometry', 'drawing'],
+  });
+
+  useEffect(() => {
+  }, [isLoaded]);
+
+  if (isLoaded) {
+    return (
       <GoogleMap mapContainerClassName='map-container' center={center} zoom={3}>
         {array.map((coord) => {
           return (
@@ -57,8 +72,8 @@ function MyComponent() {
         })}
         <></>
       </GoogleMap>
-    </LoadScript>
-  );
+    );
+  } else {
+    return <div>Loding...</div>;
+  }
 }
-
-export default React.memo(MyComponent);
