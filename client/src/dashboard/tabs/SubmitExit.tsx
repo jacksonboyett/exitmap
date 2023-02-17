@@ -18,11 +18,11 @@ import {
   FormHelperText,
   InputRightElement,
   Checkbox,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import { useToast } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useToast } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 type FormData = {
   name: string;
@@ -40,17 +40,17 @@ type FormData = {
 };
 
 const INITIAL_DATA: FormData = {
-  name: '',
-  description: '',
-  type: '',
+  name: "",
+  description: "",
+  type: "",
   heightImpact: 0,
   heightLanding: 0,
   lat: 0,
   long: 0,
-  state: '',
-  city: '',
-  country: '',
-  image: '',
+  state: "",
+  city: "",
+  country: "",
+  image: "",
   legal: true,
 };
 
@@ -74,57 +74,57 @@ const Form1 = ({
 }: Form1Props) => {
   return (
     <>
-      <Heading w='100%' textAlign={'center'} fontWeight='normal' mb='2%'>
+      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
         Object Information
       </Heading>
       <Flex>
-        <FormControl mr='5%'>
-          <FormLabel htmlFor='name' fontWeight={'normal'}>
+        <FormControl mr="5%">
+          <FormLabel htmlFor="name" fontWeight={"normal"}>
             Name of Exit
           </FormLabel>
           <Input
-            id='name'
+            id="name"
             value={name}
             onChange={(e) => updateFields({ name: e.target.value })}
           />
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor='type' fontWeight={'normal'}>
+          <FormLabel htmlFor="type" fontWeight={"normal"}>
             Type of Object
           </FormLabel>
           <Select
-            placeholder='Select type'
+            placeholder="Select type"
             value={type}
             onChange={(e) => updateFields({ type: e.target.value })}
           >
-            <option value='Building'>Building</option>
-            <option value='Antenna'>Antenna</option>
-            <option value='Span'>Span</option>
-            <option value='Earth'>Earth</option>
+            <option value="Building">Building</option>
+            <option value="Antenna">Antenna</option>
+            <option value="Span">Span</option>
+            <option value="Earth">Earth</option>
           </Select>
         </FormControl>
       </Flex>
-      <FormControl mr='5%'>
-        <FormLabel htmlFor='name' fontWeight={'normal'}>
+      <FormControl mr="5%">
+        <FormLabel htmlFor="name" fontWeight={"normal"}>
           Image link
         </FormLabel>
         <Input
-          id='name'
+          id="name"
           value={image}
           onChange={(e) => updateFields({ image: e.target.value })}
         />
       </FormControl>
-      <FormControl mt='2%'>
-        <FormLabel htmlFor='description' fontWeight={'normal'}>
+      <FormControl mt="2%">
+        <FormLabel htmlFor="description" fontWeight={"normal"}>
           Description
         </FormLabel>
         <Textarea
           rows={3}
-          shadow='sm'
-          focusBorderColor='brand.400'
+          shadow="sm"
+          focusBorderColor="brand.400"
           fontSize={{
-            sm: 'sm',
+            sm: "sm",
           }}
           value={description}
           onChange={(e) => updateFields({ description: e.target.value })}
@@ -149,44 +149,44 @@ type Form2Props = Form2Data & {
 const Form2 = ({ heightImpact, heightLanding, updateFields }: Form2Props) => {
   return (
     <>
-      <Heading w='100%' textAlign={'center'} fontWeight='normal' mb='2%'>
+      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
         Height Data
       </Heading>
       <FormControl as={GridItem} colSpan={6}>
         <FormLabel
-          htmlFor='heightImpact'
-          fontSize='sm'
-          fontWeight='md'
-          color='gray.700'
+          htmlFor="heightImpact"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
           _dark={{
-            color: 'gray.50',
+            color: "gray.50",
           }}
-          mt='2%'
+          mt="2%"
         >
           Height until impact
         </FormLabel>
-        <InputGroup size='sm'>
+        <InputGroup size="sm">
           <Input
-            type='number'
-            name='heightImpact'
-            id='heightImpact'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
-            value={heightImpact || ''}
+            type="number"
+            name="heightImpact"
+            id="heightImpact"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+            value={heightImpact || ""}
             onChange={(e) =>
               updateFields({ heightImpact: parseInt(e.target.value) })
             }
           />
           <InputRightAddon
-            bg='gray.50'
+            bg="gray.50"
             _dark={{
-              bg: 'gray.800',
+              bg: "gray.800",
             }}
-            color='gray.500'
-            rounded='md'
+            color="gray.500"
+            rounded="md"
           >
             feet
           </InputRightAddon>
@@ -194,39 +194,39 @@ const Form2 = ({ heightImpact, heightLanding, updateFields }: Form2Props) => {
       </FormControl>
       <FormControl as={GridItem} colSpan={6}>
         <FormLabel
-          htmlFor='heightLanding'
-          fontSize='sm'
-          fontWeight='md'
-          color='gray.700'
+          htmlFor="heightLanding"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
           _dark={{
-            color: 'gray.50',
+            color: "gray.50",
           }}
-          mt='2%'
+          mt="2%"
         >
           Height until landing
         </FormLabel>
-        <InputGroup size='sm'>
+        <InputGroup size="sm">
           <Input
-            type='number'
-            name='heightLanding'
-            id='heightLanding'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
-            value={heightLanding || ''}
+            type="number"
+            name="heightLanding"
+            id="heightLanding"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+            value={heightLanding || ""}
             onChange={(e) =>
               updateFields({ heightLanding: parseInt(e.target.value) })
             }
           />
           <InputRightAddon
-            bg='gray.50'
+            bg="gray.50"
             _dark={{
-              bg: 'gray.800',
+              bg: "gray.800",
             }}
-            color='gray.500'
-            rounded='md'
+            color="gray.500"
+            rounded="md"
           >
             feet
           </InputRightAddon>
@@ -258,44 +258,43 @@ const Form3 = ({
   legal,
   updateFields,
 }: Form3Props) => {
-
   const [isLegal, setIsLegal] = useState(true);
 
   function handleCheckbox() {
     const legality = isLegal;
-    setIsLegal(!legality)
-    updateFields({legal: !legality})
+    setIsLegal(!legality);
+    updateFields({ legal: !legality });
   }
 
   return (
     <>
-      <Heading w='100%' textAlign={'center'} fontWeight='normal'>
+      <Heading w="100%" textAlign={"center"} fontWeight="normal">
         Location Data
       </Heading>
       <SimpleGrid columns={2} spacing={6}>
         <FormControl as={GridItem}>
           <FormLabel
-            htmlFor='city'
-            fontSize='sm'
-            fontWeight='md'
-            color='gray.700'
+            htmlFor="city"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
             _dark={{
-              color: 'gray.50',
+              color: "gray.50",
             }}
-            mt='2%'
+            mt="2%"
           >
             City
           </FormLabel>
           <Input
-            type='text'
-            name='city'
-            id='city'
-            autoComplete='city'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
+            type="text"
+            name="city"
+            id="city"
+            autoComplete="city"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
             value={city}
             onChange={(e) => updateFields({ city: e.target.value })}
           />
@@ -303,27 +302,27 @@ const Form3 = ({
 
         <FormControl as={GridItem}>
           <FormLabel
-            htmlFor='state'
-            fontSize='sm'
-            fontWeight='md'
-            color='gray.700'
+            htmlFor="state"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
             _dark={{
-              color: 'gray.50',
+              color: "gray.50",
             }}
-            mt='2%'
+            mt="2%"
           >
             State / Province
           </FormLabel>
           <Input
-            type='text'
-            name='state'
-            id='state'
-            autoComplete='state'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
+            type="text"
+            name="state"
+            id="state"
+            autoComplete="state"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
             value={state}
             onChange={(e) => updateFields({ state: e.target.value })}
           />
@@ -331,27 +330,27 @@ const Form3 = ({
 
         <FormControl as={GridItem} gridColumnEnd={4}>
           <FormLabel
-            htmlFor='country'
-            fontSize='sm'
-            fontWeight='md'
-            color='gray.700'
+            htmlFor="country"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
             _dark={{
-              color: 'gray.50',
+              color: "gray.50",
             }}
-            mt='2%'
+            mt="2%"
           >
             Country
           </FormLabel>
           <Input
-            type='text'
-            name='country'
-            id='country'
-            autoComplete='country'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
+            type="text"
+            name="country"
+            id="country"
+            autoComplete="country"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
             value={country}
             onChange={(e) => updateFields({ country: e.target.value })}
           />
@@ -359,72 +358,77 @@ const Form3 = ({
 
         <FormControl as={GridItem}>
           <FormLabel
-            htmlFor='lat'
-            fontSize='sm'
-            fontWeight='md'
-            color='gray.700'
+            htmlFor="lat"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
             _dark={{
-              color: 'gray.50',
+              color: "gray.50",
             }}
-            mt='2%'
+            mt="2%"
           >
             Latitude
           </FormLabel>
           <Input
-            type='number'
-            name='lat'
-            id='lat'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
-            value={lat || ''}
-            onChange={(e) => updateFields({ lat: parseInt(e.target.value) })}
+            type="number"
+            name="lat"
+            max="90"
+            min="-90"
+            isInvalid={true}
+            id="lat"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+            value={lat || ""}
+            onChange={(e: any) =>
+              updateFields({ lat: parseInt(e.target.value) })
+            }
           />
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel
-            htmlFor='long'
-            fontSize='sm'
-            fontWeight='md'
-            color='gray.700'
+            htmlFor="long"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
             _dark={{
-              color: 'gray.50',
+              color: "gray.50",
             }}
-            mt='2%'
+            mt="2%"
           >
             Longitude
           </FormLabel>
           <Input
-            type='number'
-            name='long'
-            id='long'
-            focusBorderColor='brand.400'
-            shadow='sm'
-            size='sm'
-            w='full'
-            rounded='md'
-            value={long || ''}
+            type="number"
+            name="long"
+            id="long"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+            value={long || ""}
             onChange={(e) => updateFields({ long: parseInt(e.target.value) })}
           />
         </FormControl>
 
         <FormControl>
-          <Checkbox
-          isChecked={!isLegal}
-          onChange={() => handleCheckbox()}>Illegal</Checkbox>
+          <Checkbox isChecked={!isLegal} onChange={() => handleCheckbox()}>
+            Illegal
+          </Checkbox>
         </FormControl>
       </SimpleGrid>
     </>
   );
 };
 
-const exitsURL = 'http://localhost:8080/exits';
+const exitsURL = "http://localhost:8080/exits";
 
 async function addExit(data: FormData) {
-  console.log('Exit axios post');
+  console.log("Exit axios post");
   try {
     await axios.post(exitsURL, {
       headers: {
@@ -461,20 +465,20 @@ export default function Multistep() {
   return (
     <>
       <Box
-        borderWidth='1px'
-        rounded='lg'
-        shadow='1px 1px 3px rgba(0,0,0,0.3)'
+        borderWidth="1px"
+        rounded="lg"
+        shadow="1px 1px 3px rgba(0,0,0,0.3)"
         maxWidth={800}
         p={6}
-        m='10px auto'
-        as='form'
+        m="10px auto"
+        as="form"
       >
         <Progress
           hasStripe
           value={progress}
-          colorScheme='green'
-          mb='5%'
-          mx='5%'
+          colorScheme="green"
+          mb="5%"
+          mx="5%"
           isAnimated
         ></Progress>
         {step === 1 ? (
@@ -484,8 +488,8 @@ export default function Multistep() {
         ) : (
           <Form3 {...data} updateFields={updateFields} />
         )}
-        <ButtonGroup mt='5%' w='100%'>
-          <Flex w='100%' justifyContent='space-between'>
+        <ButtonGroup mt="5%" w="100%">
+          <Flex w="100%" justifyContent="space-between">
             <Flex>
               <Button
                 onClick={() => {
@@ -493,15 +497,15 @@ export default function Multistep() {
                   setProgress(progress - 33.33);
                 }}
                 isDisabled={step === 1}
-                colorScheme='green'
-                variant='solid'
-                w='7rem'
-                mr='5%'
+                colorScheme="green"
+                variant="solid"
+                w="7rem"
+                mr="5%"
               >
                 Back
               </Button>
               <Button
-                w='7rem'
+                w="7rem"
                 isDisabled={step === 3}
                 onClick={() => {
                   setStep(step + 1);
@@ -511,22 +515,22 @@ export default function Multistep() {
                     setProgress(progress + 33.33);
                   }
                 }}
-                colorScheme='green'
-                variant='outline'
+                colorScheme="green"
+                variant="outline"
               >
                 Next
               </Button>
             </Flex>
             {step === 3 ? (
               <Button
-                w='7rem'
-                colorScheme='red'
-                variant='solid'
+                w="7rem"
+                colorScheme="red"
+                variant="solid"
                 onClick={() => {
                   toast({
-                    title: 'Thanks!',
+                    title: "Thanks!",
                     description: "We've added the new exit point.",
-                    status: 'success',
+                    status: "success",
                     duration: 3000,
                     isClosable: true,
                   });

@@ -47,7 +47,7 @@ function CountryGroups(props: Partial<Props>) {
             <ListItem
               key={uniqid()}
               onClick={() => routeCountry(country)}
-              _hover={{ textDecoration: 'underline' }}
+              _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
             >
               {country}
             </ListItem> 

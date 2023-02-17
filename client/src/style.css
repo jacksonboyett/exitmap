@@ -6,3 +6,7 @@
 .exit-map-links:hover {
 	text-decoration: underline;
 }
+
+.logo:hover {
+	cursor: pointer;
+}

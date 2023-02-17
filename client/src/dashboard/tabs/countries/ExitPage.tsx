@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Box,
   chakra,
@@ -17,37 +17,39 @@ import {
   VisuallyHidden,
   List,
   ListItem,
-} from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import { MdLocalShipping } from 'react-icons/md';
+  Input,
+  Textarea,
+} from "@chakra-ui/react";
+import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { MdLocalShipping } from "react-icons/md";
 
 interface Exit {
-	name: string,
-	description: string,
-  type: string,
-  heightimpact: number,
-  heightlanding: number,
-  lat: number, 
-  long: number,
-  city: string,
-	state: string,
-  country: string,
-  image: string,
-  legal: boolean
+  name: string;
+  description: string;
+  type: string;
+  heightimpact: number;
+  heightlanding: number;
+  lat: number;
+  long: number;
+  city: string;
+  state: string;
+  country: string;
+  image: string;
+  legal: boolean;
 }
 
 function Exit() {
   const [exit, setExit] = useState<Partial<Exit>>({});
 
-  const exitURL = 'http://localhost:8080/exit';
+  const exitURL = "http://localhost:8080/exit";
 
   useEffect(() => {
     getExit(exitURL);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(exit.image);
-  // }, [exit]);
+  useEffect(() => {
+    console.log(exit);
+  }, [exit]);
 
   async function getExit(exitsURL: string) {
     try {
@@ -60,8 +62,25 @@ function Exit() {
     }
   }
 
+  function legalColor() {
+    if (exit.legal) {
+      return "green.400";
+    } else {
+      return "red.400";
+    }
+  }
+  const lC = legalColor();
+  function legalName() {
+    if (exit.legal) {
+      return "Legal";
+    } else {
+      return "Illegal";
+    }
+  }
+  const lN = legalName();
+
   return (
-    <Container maxW={'7xl'}>
+    <Container maxW={"7xl"}>
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
@@ -69,28 +88,28 @@ function Exit() {
       >
         <Flex>
           <Image
-            rounded={'md'}
-            alt={'product image'}
+            rounded={"md"}
+            alt={"product image"}
             src={exit.image}
-            fit={'cover'}
-            align={'center'}
-            w={'100%'}
-            h={{ base: '100%', sm: '400px', lg: '500px' }}
+            fit={"cover"}
+            align={"center"}
+            w={"100%"}
+            h={{ base: "100%", sm: "400px", lg: "500px" }}
           />
         </Flex>
         <Stack spacing={{ base: 6, md: 10 }}>
-          <Box as={'header'}>
+          <Box as={"header"}>
             <Heading
               lineHeight={1.1}
               fontWeight={600}
-              fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}
+              fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}
             >
               {exit.name}
             </Heading>
             <Text
-              color={useColorModeValue('gray.900', 'gray.400')}
+              color={useColorModeValue("gray.900", "gray.400")}
               fontWeight={300}
-              fontSize={'2xl'}
+              fontSize={"2xl"}
             >
               {`${exit.city}, ${exit.state}`}
             </Text>
@@ -98,66 +117,82 @@ function Exit() {
 
           <Stack
             spacing={{ base: 4, sm: 6 }}
-            direction={'column'}
+            direction={"column"}
             divider={
               <StackDivider
-                borderColor={useColorModeValue('gray.200', 'gray.600')}
+                borderColor={useColorModeValue("gray.200", "gray.600")}
               />
             }
           >
             <VStack spacing={{ base: 4, sm: 6 }}>
-              <Text fontSize={'lg'}>
-                {exit.description}
-              </Text>
+              <Text fontSize={"lg"}>{exit.description}</Text>
             </VStack>
 
-            <Box>
-              <Text
-                fontSize={{ base: '16px', lg: '18px' }}
-                color={useColorModeValue('yellow.500', 'yellow.300')}
-                fontWeight={'500'}
-                textTransform={'uppercase'}
-                mb={'4'}
-              >
-                Exit Details
-              </Text>
+            <Flex justifyContent="space-between">
+              <Box>
+                <Text
+                  fontSize={{ base: "16px", lg: "18px" }}
+                  color={useColorModeValue("yellow.500", "yellow.300")}
+                  fontWeight={"500"}
+                  textTransform={"uppercase"}
+                  mb={"4"}
+                >
+                  Exit Details
+                </Text>
 
-              <List spacing={2}>
-                <ListItem>
-                  <Text as={'span'} fontWeight={'bold'}>
-                    Height until impact:
-                  </Text>{` ${exit.heightimpact} feet`}
-                </ListItem>
-                <ListItem>
-                  <Text as={'span'} fontWeight={'bold'}>
-                    Height until landing:
-                  </Text>{` ${exit.heightlanding} feet`}
-                </ListItem>
-              </List>
-            </Box>
+                <List spacing={2}>
+                  <ListItem>
+                    <Text as={"span"} fontWeight={"bold"}>
+                      Height until impact:
+                    </Text>
+                    {` ${exit.heightimpact} feet`}
+                  </ListItem>
+                  <ListItem>
+                    <Text as={"span"} fontWeight={"bold"}>
+                      Height until landing:
+                    </Text>
+                    {` ${exit.heightlanding} feet`}
+                  </ListItem>
+                </List>
+              </Box>
+              <Button
+                variant={"outline"}
+                height="30px"
+                borderColor={lC}
+                color={lC}
+                pointerEvents={"none"}
+                alignSelf="center"
+              >
+                {lN}
+              </Button>
+            </Flex>
           </Stack>
 
           <Button
-            rounded={'none'}
-            w={'full'}
+            rounded={"none"}
+            w={"full"}
             mt={8}
-            size={'lg'}
-            py={'7'}
-            bg={useColorModeValue('gray.900', 'gray.50')}
-            color={useColorModeValue('white', 'gray.900')}
-            textTransform={'uppercase'}
+            size={"lg"}
+            py={"7"}
+            bg={useColorModeValue("gray.900", "gray.50")}
+            color={useColorModeValue("white", "gray.900")}
+            textTransform={"uppercase"}
             _hover={{
-              transform: 'translateY(2px)',
-              boxShadow: 'lg',
+              transform: "translateY(2px)",
+              boxShadow: "lg",
             }}
           >
             Add to favorites
           </Button>
 
-          <Stack direction='row' alignItems='center' justifyContent={'center'}>
-          </Stack>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent={"center"}
+          ></Stack>
         </Stack>
       </SimpleGrid>
+      <Textarea bgColor="white" maxW="50%" />
     </Container>
   );
 }

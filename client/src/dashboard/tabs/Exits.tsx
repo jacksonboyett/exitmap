@@ -4,16 +4,15 @@ import {
   ListIcon,
   OrderedList,
   UnorderedList,
-} from '@chakra-ui/react';
-import { Divider, Flex } from '@chakra-ui/react';
-import CountryGroup from './countries/CountryGroups';
-import { useEffect, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { Routes, Route } from 'react-router-dom';
-import uniqid from 'uniqid';
+} from "@chakra-ui/react";
+import { Divider, Flex } from "@chakra-ui/react";
+import CountryGroup from "./countries/CountryGroups";
+import { useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import { Routes, Route } from "react-router-dom";
+import uniqid from "uniqid";
 
-
-const axiosRequest = require('axios');
+const axiosRequest = require("axios");
 
 interface Props {
   firstLetter: string;
@@ -25,7 +24,7 @@ function Exits() {
   const [countries, setCountries] = useState<string[]>([]);
   const [letters, setLetters] = useState<string[]>([]);
 
-  const exitsURL = 'http://localhost:8080/exits';
+  const exitsURL = "http://localhost:8080/exits";
 
   useEffect(() => {
     getExits(exitsURL);
@@ -42,12 +41,14 @@ function Exits() {
     }
   }
 
-	// LOOK UP CUSTOM HOOKS
+  // LOOK UP CUSTOM HOOKS
 
   useEffect(() => {
-		let countriesArray = data.map((exit) => {return exit.country})
+    let countriesArray = data.map((exit) => {
+      return exit.country;
+    });
     countriesArray = removeDuplicates(countriesArray);
-		setCountries(countriesArray.sort())
+    setCountries(countriesArray.sort());
     getFirstLetter(countriesArray);
   }, [data]);
 
@@ -62,26 +63,35 @@ function Exits() {
     return array.filter((item, index) => array.indexOf(item) === index);
   }
 
-	// Array of array of country names, use index in map
+  // Array of array of country names, use index in map
 
   return (
-		<Routes>
-			<Route path='' element={
-    <div style={{ display: 'grid' }}>
-      {letters.map((letter) => {
-        return <CountryGroup key={uniqid()} firstLetter={letter} countryNames={(function(){
-					let array: Array<string> = [];
-					countries.forEach(country => {
-						if (country.charAt(0) === letter) {
-							array.push(country)
-						}
-					})
-					return(array)
-				})()}/>;
-      })}
-    </div>
-			} />
-		</Routes>
+    <Routes>
+      <Route
+        path=""
+        element={
+          <div style={{ display: "grid" }}>
+            {letters.map((letter) => {
+              return (
+                <CountryGroup
+                  key={uniqid()}
+                  firstLetter={letter}
+                  countryNames={(function () {
+                    let array: Array<string> = [];
+                    countries.forEach((country) => {
+                      if (country.charAt(0) === letter) {
+                        array.push(country);
+                      }
+                    });
+                    return array;
+                  })()}
+                />
+              );
+            })}
+          </div>
+        }
+      />
+    </Routes>
   );
 }
 
@@ -90,4 +100,4 @@ function Exits() {
 export default Exits;
 
 // Get first letter of countries to group them
-// 
+//

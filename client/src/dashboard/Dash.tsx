@@ -121,6 +121,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
       <Heading
+            className='logo'
             fontWeight={600}
             fontSize={'50px'}
             lineHeight={'110%'}
