@@ -85,8 +85,8 @@ export default function SidebarWithHeader({
         <Routes>
           <Route path='*' element={<DashHome />} />
           <Route path='exits/*' element={<Exits />} />
-          <Route path='country' element={<Country />} />
-          <Route path='exit' element={<Exit />} />
+          <Route path='country/:name' element={<Country />} />
+          <Route path="/exit/:id" element={<Exit />} />
           <Route path='submit' element={<SubmitExit />} />
         </Routes>
       </Box>

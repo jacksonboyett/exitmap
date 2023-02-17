@@ -22,8 +22,8 @@ function CountryGroups(props: Partial<Props>) {
 
   function routeCountry(country: string) {
     // navigate(`/dash/exits/${country}`);
-    localStorage.country = country;
-    navigate(`/dash/country`);
+    // localStorage.country = country;
+    navigate(`/dash/country/${country}`);
   }
 
   useEffect(() => {

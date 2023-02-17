@@ -67,13 +67,13 @@ async function getExitsFromCountry(country) {
   });
 }
 
-async function getExit(name) {
+async function getExit(id) {
   return new Promise((resolve) => {
     pool.query(
-      "SELECT * FROM exits WHERE name = $1",
-      [name],
+      "SELECT * FROM exits WHERE _id = $1",
+      [id],
       (err, results) => {
-        console.log(name);
+        console.log(id);
         if (err) {
           console.log(err);
         }

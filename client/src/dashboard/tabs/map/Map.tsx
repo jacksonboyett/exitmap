@@ -53,9 +53,8 @@ export default function MyComponent() {
     setActiveMarker(marker);
   };
 
-  function goToExit(name: string) {
-    localStorage.name = name;
-    navigate(`/dash/exit`)
+  function goToExit(id: number) {
+    navigate(`/dash/exit/${id}`)
   }
 
   if (isLoaded) {
@@ -70,7 +69,7 @@ export default function MyComponent() {
             >
               {activeMarker === coord._id ? (
             <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
-              <div onClick={() => goToExit(coord.name)} className='exit-map-links' >{coord.name}</div>
+              <div onClick={() => goToExit(coord._id)} className='exit-map-links' >{coord.name}</div>
             </InfoWindowF>
           ) : null}
             </MarkerF>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import uniqid from "uniqid";
 import {
@@ -25,6 +25,7 @@ import {
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
 import { format } from "date-fns";
+import { useParams } from 'react-router-dom'
 
 interface Exit {
   _id: number;
@@ -61,13 +62,11 @@ function Exit() {
     getComments(exitURL);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(exit);
-  // }, [exit]);
+  let { id } = useParams();
 
   async function getExit(exitURL: string) {
     try {
-      const res = await axios.get(`${exitURL}/${localStorage.name}`);
+      const res = await axios.get(`${exitURL}/${id}`);
       setExit(res.data[0]);
     } catch (err: any) {
       if (err) {
@@ -78,7 +77,7 @@ function Exit() {
 
   async function getComments(exitURL: string) {
     try {
-      const res = await axios.get(`${exitURL}s/${localStorage.name}/comments`);
+      const res = await axios.get(`${exitURL}s/${id}/comments`);
       setComments(res.data);
     } catch (err: any) {
       if (err) {

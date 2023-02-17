@@ -78,6 +78,7 @@ router.get("/exits/:id", (req, res, next) => {
 });
 
 router.get("/exit/:id", (req, res, next) => {
+  console.log(req.params.id);
   getInfoFromSpecific(req, res, getExit);
 });
 

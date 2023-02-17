@@ -12,6 +12,7 @@ import axios from 'axios';
 import { Card, CardHeader, CardBody, CardFooter, Text } from '@chakra-ui/react';
 import ExitCard from './ExitCard';
 import uniqid from 'uniqid';
+import { useParams } from 'react-router-dom'
 
 type Props = {
   firstLetter: string;
@@ -23,15 +24,20 @@ function Country(props: Partial<Props>) {
 
   const exitsURL = 'http://localhost:8080/exits';
 
+  let { name } = useParams();
+
   useEffect(() => {
     getExitsFromCountry(exitsURL);
   }, []);
 
+  useEffect(() => {
+    console.log(exits)
+  }, [exits]);
+
   async function getExitsFromCountry(exitsURL: string) {
     try {
-      const res = await axios.get(`${exitsURL}/${localStorage.country}`);
+      const res = await axios.get(`${exitsURL}/${name}`);
       setExits(res.data);
-      // console.log(res.data[0].name)
     } catch (err: any) {
       if (err) {
         throw err;
@@ -43,7 +49,7 @@ function Country(props: Partial<Props>) {
     <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
     {exits.map((exit) => {
       return (
-        <ExitCard key={uniqid()} name={exit.name} description={exit.description} city={exit.city} image={exit.image} legal={exit.legal}/>
+        <ExitCard key={uniqid()} name={exit.name} description={exit.description} city={exit.city} image={exit.image} legal={exit.legal} id={exit._id}/>
       )
     })}
     </div>

@@ -21,6 +21,7 @@ type Props = {
   city: string;
   image: string;
   legal: boolean;
+  id: number;
 };
 
 function ExitCard(props: Partial<Props>) {
@@ -47,8 +48,7 @@ function ExitCard(props: Partial<Props>) {
   const lN = legalName();
 
   function goToExit() {
-    localStorage.name = props.name;
-    navigate(`/dash/exit`);
+    navigate(`/dash/exit/${props.id}`);
   }
 
   return (

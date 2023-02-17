@@ -24,7 +24,7 @@ async function getComments(exit_id) {
       on exit_id = exits._id
       join users
       on user_id = users._id
-      where exits.name = $1;`,
+      where exits._id = $1;`,
       [exit_id],
       (err, results) => {
         if (err) {
