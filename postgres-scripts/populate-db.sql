@@ -24,7 +24,8 @@ insert into
 		city,
 		state,
 		country,
-		image
+		image,
+		legal
 	)
 values
 	(
@@ -38,7 +39,8 @@ values
 		'Twin Falls',
 		'Idaho',
 		'United States',
-		'https://visitsouthidaho.com/content/uploads/2019/06/Miles.jpg'
+		'https://visitsouthidaho.com/content/uploads/2019/06/Miles.jpg',
+		'1'
 	),
 	(
 		'Tombstone',
@@ -51,7 +53,8 @@ values
 		'Moab',
 		'Utah',
 		'United States',
-		'https://www.verticalperceptions.com/img-get2/I0000tS5KXmDnMiE/fit=1000x750/DSC-0289.jpg'
+		'https://www.verticalperceptions.com/img-get2/I0000tS5KXmDnMiE/fit=1000x750/DSC-0289.jpg',
+		'1'
 	),
 	(
 		'Der Rotenfels',
@@ -64,7 +67,8 @@ values
 		'Bad Kreuznach',
 		'Rhineland-Pfalz',
 		'Germany',
-		'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Rotenfels_bei_Bad_M%C3%BCnster_am_Stein_Ebernburg.JPG/800px-Rotenfels_bei_Bad_M%C3%BCnster_am_Stein_Ebernburg.JPG'
+		'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Rotenfels_bei_Bad_M%C3%BCnster_am_Stein_Ebernburg.JPG/800px-Rotenfels_bei_Bad_M%C3%BCnster_am_Stein_Ebernburg.JPG',
+		'1'
 	),
 	(
 		'El Capitan',
@@ -77,7 +81,8 @@ values
 		'Yosemite',
 		'California',
 		'United States',
-		'https://www.hcn.org/issues/47.12/deaths-renew-calls-for-national-parks-to-rescind-base-jumping-bans/basejumping-jpg/image'
+		'https://www.hcn.org/issues/47.12/deaths-renew-calls-for-national-parks-to-rescind-base-jumping-bans/basejumping-jpg/image',
+		'1'
 	),
 	(
 		'Forrest Hill Bridge',
@@ -90,7 +95,8 @@ values
 		'Auburn',
 		'California',
 		'United States',
-		'https://i.ytimg.com/vi/EhWDtnq7PNw/maxresdefault.jpg'
+		'https://i.ytimg.com/vi/EhWDtnq7PNw/maxresdefault.jpg',
+		'0'
 	),
 	(
 		'Icon Apartments',
@@ -99,9 +105,10 @@ values
 		419,
 		370,
 		33.8489,
-		84.3672,
+		-84.3672,
 		'Atlanta',
 		'Georgia',
 		'United States',
-		'https://image1.apartmentfinder.com/i2/FNfKeTxDHdwNA-oJbtp0hD_S5q3VxjnI8hllR_f7USg/111/icon-buckhead-atlanta-ga-highway-access.jpg'
+		'https://image1.apartmentfinder.com/i2/FNfKeTxDHdwNA-oJbtp0hD_S5q3VxjnI8hllR_f7USg/111/icon-buckhead-atlanta-ga-highway-access.jpg',
+		'0'
 	);

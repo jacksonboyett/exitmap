@@ -17,10 +17,11 @@ import {
   Textarea,
   FormHelperText,
   InputRightElement,
+  Checkbox,
 } from '@chakra-ui/react';
 
 import { useToast } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 type FormData = {
@@ -35,6 +36,7 @@ type FormData = {
   city: string;
   country: string;
   image: string;
+  legal: boolean;
 };
 
 const INITIAL_DATA: FormData = {
@@ -49,6 +51,7 @@ const INITIAL_DATA: FormData = {
   city: '',
   country: '',
   image: '',
+  legal: true,
 };
 
 type Form1Data = {
@@ -56,13 +59,19 @@ type Form1Data = {
   type: string;
   description: string;
   image: string;
-}
-
-type Form1Props = Form1Data & {
-	updateFields: (fields: Partial<Form1Data>) => void;
 };
 
-const Form1 = ({ name, type, description, image, updateFields }: Form1Props) => {
+type Form1Props = Form1Data & {
+  updateFields: (fields: Partial<Form1Data>) => void;
+};
+
+const Form1 = ({
+  name,
+  type,
+  description,
+  image,
+  updateFields,
+}: Form1Props) => {
   return (
     <>
       <Heading w='100%' textAlign={'center'} fontWeight='normal' mb='2%'>
@@ -73,14 +82,22 @@ const Form1 = ({ name, type, description, image, updateFields }: Form1Props) => 
           <FormLabel htmlFor='name' fontWeight={'normal'}>
             Name of Exit
           </FormLabel>
-          <Input id='name' value={ name } onChange={e => updateFields({ name: e.target.value })}/>
+          <Input
+            id='name'
+            value={name}
+            onChange={(e) => updateFields({ name: e.target.value })}
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel htmlFor='type' fontWeight={'normal'}>
             Type of Object
           </FormLabel>
-          <Select placeholder='Select type' value={ type } onChange={e => updateFields({ type: e.target.value })}>
+          <Select
+            placeholder='Select type'
+            value={type}
+            onChange={(e) => updateFields({ type: e.target.value })}
+          >
             <option value='Building'>Building</option>
             <option value='Antenna'>Antenna</option>
             <option value='Span'>Span</option>
@@ -89,11 +106,15 @@ const Form1 = ({ name, type, description, image, updateFields }: Form1Props) => 
         </FormControl>
       </Flex>
       <FormControl mr='5%'>
-          <FormLabel htmlFor='name' fontWeight={'normal'}>
-            Image link
-          </FormLabel>
-          <Input id='name' value={ image } onChange={e => updateFields({ image: e.target.value })}/>
-        </FormControl>
+        <FormLabel htmlFor='name' fontWeight={'normal'}>
+          Image link
+        </FormLabel>
+        <Input
+          id='name'
+          value={image}
+          onChange={(e) => updateFields({ image: e.target.value })}
+        />
+      </FormControl>
       <FormControl mt='2%'>
         <FormLabel htmlFor='description' fontWeight={'normal'}>
           Description
@@ -105,8 +126,8 @@ const Form1 = ({ name, type, description, image, updateFields }: Form1Props) => 
           fontSize={{
             sm: 'sm',
           }}
-					value={ description }
-					onChange={e => updateFields({ description: e.target.value })}
+          value={description}
+          onChange={(e) => updateFields({ description: e.target.value })}
         />
         <FormHelperText>
           Please describe in detail information required to jump the object.
@@ -119,10 +140,10 @@ const Form1 = ({ name, type, description, image, updateFields }: Form1Props) => 
 type Form2Data = {
   heightImpact: number;
   heightLanding: number;
-}
+};
 
 type Form2Props = Form2Data & {
-	updateFields: (fields: Partial<Form2Data>) => void;
+  updateFields: (fields: Partial<Form2Data>) => void;
 };
 
 const Form2 = ({ heightImpact, heightLanding, updateFields }: Form2Props) => {
@@ -154,8 +175,10 @@ const Form2 = ({ heightImpact, heightLanding, updateFields }: Form2Props) => {
             size='sm'
             w='full'
             rounded='md'
-						value={ heightImpact || ''}
-						onChange={e => updateFields({ heightImpact: parseInt(e.target.value) })}
+            value={heightImpact || ''}
+            onChange={(e) =>
+              updateFields({ heightImpact: parseInt(e.target.value) })
+            }
           />
           <InputRightAddon
             bg='gray.50'
@@ -192,8 +215,10 @@ const Form2 = ({ heightImpact, heightLanding, updateFields }: Form2Props) => {
             size='sm'
             w='full'
             rounded='md'
-						value={ heightLanding || ''}
-						onChange={e => updateFields({ heightLanding: parseInt(e.target.value) })}
+            value={heightLanding || ''}
+            onChange={(e) =>
+              updateFields({ heightLanding: parseInt(e.target.value) })
+            }
           />
           <InputRightAddon
             bg='gray.50'
@@ -217,13 +242,31 @@ type Form3Data = {
   state: string;
   city: string;
   country: string;
-}
-
-type Form3Props = Form3Data & {
-	updateFields: (fields: Partial<Form3Data>) => void;
+  legal: boolean;
 };
 
-const Form3 = ({ lat, long, state, city, country, updateFields }: Form3Props) => {
+type Form3Props = Form3Data & {
+  updateFields: (fields: Partial<Form3Data>) => void;
+};
+
+const Form3 = ({
+  lat,
+  long,
+  state,
+  city,
+  country,
+  legal,
+  updateFields,
+}: Form3Props) => {
+
+  const [isLegal, setIsLegal] = useState(true);
+
+  function handleCheckbox() {
+    const legality = isLegal;
+    setIsLegal(!legality)
+    updateFields({legal: !legality})
+  }
+
   return (
     <>
       <Heading w='100%' textAlign={'center'} fontWeight='normal'>
@@ -253,8 +296,8 @@ const Form3 = ({ lat, long, state, city, country, updateFields }: Form3Props) =>
             size='sm'
             w='full'
             rounded='md'
-						value={ city }
-						onChange={e => updateFields({ city: e.target.value })}
+            value={city}
+            onChange={(e) => updateFields({ city: e.target.value })}
           />
         </FormControl>
 
@@ -281,8 +324,8 @@ const Form3 = ({ lat, long, state, city, country, updateFields }: Form3Props) =>
             size='sm'
             w='full'
             rounded='md'
-						value={ state }
-						onChange={e => updateFields({ state: e.target.value })}
+            value={state}
+            onChange={(e) => updateFields({ state: e.target.value })}
           />
         </FormControl>
 
@@ -309,8 +352,8 @@ const Form3 = ({ lat, long, state, city, country, updateFields }: Form3Props) =>
             size='sm'
             w='full'
             rounded='md'
-						value={ country }
-						onChange={e => updateFields({ country: e.target.value })}
+            value={country}
+            onChange={(e) => updateFields({ country: e.target.value })}
           />
         </FormControl>
 
@@ -336,12 +379,10 @@ const Form3 = ({ lat, long, state, city, country, updateFields }: Form3Props) =>
             size='sm'
             w='full'
             rounded='md'
-						value={ lat || '' }
-						onChange={e => updateFields({ lat: parseInt(e.target.value) })}
+            value={lat || ''}
+            onChange={(e) => updateFields({ lat: parseInt(e.target.value) })}
           />
         </FormControl>
-
-				{/* WHY DOES STATE NOT HOLD WHEN PRESS NEXT AND THEN BACK */}
 
         <FormControl as={GridItem}>
           <FormLabel
@@ -365,38 +406,45 @@ const Form3 = ({ lat, long, state, city, country, updateFields }: Form3Props) =>
             size='sm'
             w='full'
             rounded='md'
-						value={ long || '' }
-						onChange={e => updateFields({ long: parseInt(e.target.value) })}
+            value={long || ''}
+            onChange={(e) => updateFields({ long: parseInt(e.target.value) })}
           />
+        </FormControl>
+
+        <FormControl>
+          <Checkbox
+          isChecked={!isLegal}
+          onChange={() => handleCheckbox()}>Illegal</Checkbox>
         </FormControl>
       </SimpleGrid>
     </>
   );
 };
 
-const exitsURL = "http://localhost:8080/exits";
+const exitsURL = 'http://localhost:8080/exits';
 
 async function addExit(data: FormData) {
-	console.log('Exit axios post')
-	try {
-		await axios.post(exitsURL, {
-			headers: {
-				name: data.name,
-				description: data.description,
-				type: data.type,
-				heightImpact: data.heightImpact,
-				heightLanding: data.heightLanding,
-				lat: data.lat,
-				long: data.long,
-				city: data.city, 
-				state: data.state, 
-				country: data.country,
-        image: data.image, 
-			}
-		})
-	} catch (err) {
-		if (err) throw err
-	}
+  console.log('Exit axios post');
+  try {
+    await axios.post(exitsURL, {
+      headers: {
+        name: data.name,
+        description: data.description,
+        type: data.type,
+        heightImpact: data.heightImpact,
+        heightLanding: data.heightLanding,
+        lat: data.lat,
+        long: data.long,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        image: data.image,
+        legal: data.legal,
+      },
+    });
+  } catch (err) {
+    if (err) throw err;
+  }
 }
 
 export default function Multistep() {
@@ -405,11 +453,11 @@ export default function Multistep() {
   const [progress, setProgress] = useState<number>(33.33);
   const [data, setData] = useState(INITIAL_DATA);
 
-	function updateFields(fields: Partial<FormData>) {
-		setData(prev => {
-			return {...prev, ...fields }
-		})
-	}
+  function updateFields(fields: Partial<FormData>) {
+    setData((prev) => {
+      return { ...prev, ...fields };
+    });
+  }
   return (
     <>
       <Box
@@ -430,11 +478,11 @@ export default function Multistep() {
           isAnimated
         ></Progress>
         {step === 1 ? (
-          <Form1 {...data} updateFields={ updateFields }/>
+          <Form1 {...data} updateFields={updateFields} />
         ) : step === 2 ? (
-          <Form2 {...data} updateFields={ updateFields }/>
+          <Form2 {...data} updateFields={updateFields} />
         ) : (
-          <Form3 {...data} updateFields={ updateFields }/>
+          <Form3 {...data} updateFields={updateFields} />
         )}
         <ButtonGroup mt='5%' w='100%'>
           <Flex w='100%' justifyContent='space-between'>
@@ -482,7 +530,7 @@ export default function Multistep() {
                     duration: 3000,
                     isClosable: true,
                   });
-									addExit(data);
+                  addExit(data);
                 }}
               >
                 Submit

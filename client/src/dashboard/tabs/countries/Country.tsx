@@ -43,7 +43,7 @@ function Country(props: Partial<Props>) {
     <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
     {exits.map((exit) => {
       return (
-        <ExitCard key={uniqid()} name={exit.name} description={exit.description} city={exit.city} image={exit.image}/>
+        <ExitCard key={uniqid()} name={exit.name} description={exit.description} city={exit.city} image={exit.image} legal={exit.legal}/>
       )
     })}
     </div>

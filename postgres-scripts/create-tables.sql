@@ -18,5 +18,6 @@ create table exits (
 	city varchar(255),
 	state varchar(255),
 	country varchar(255),
-	image varchar(500)
+	image varchar(500),
+	legal boolean
 );

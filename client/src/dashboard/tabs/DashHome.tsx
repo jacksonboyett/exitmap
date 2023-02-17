@@ -1,5 +1,8 @@
+import Map from './map/Map';
+
 function DashHome() {
-	return ( <div>'HOME'</div> );
+	
+	return ( <div><Map/></div> );
 }
 
 export default DashHome;

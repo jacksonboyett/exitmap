@@ -48,6 +48,7 @@ router.post('/exits', (req, res, next) => {
     state,
     country,
     image,
+    legal,
   } = req.body.headers;
   addInfo(req, res, addExit, [
     name,
@@ -61,6 +62,7 @@ router.post('/exits', (req, res, next) => {
     state,
     country,
     image,
+    legal,
   ]);
 });
 
