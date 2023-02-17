@@ -1,29 +1,36 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const passport = require('passport');
+const passport = require("passport");
 
-const { addExit, getExits, getExitsFromCountry, getExit } = require('../controllers/exitController');
+const {
+  addExit,
+  getExits,
+  getExitsFromCountry,
+  getExit,
+} = require("../controllers/exitController");
+
+const { addComment, getComments } = require("../controllers/commentController");
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
 });
 
 router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/success',
-    failureRedirect: '/failure',
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/success",
+    failureRedirect: "/failure",
   })
 );
 
-router.get('/success', (req, res, next) => {
+router.get("/success", (req, res, next) => {
   res.send({
     isLoggedIn: true,
   });
 });
 
-router.get('/failure', (req, res, next) => {
+router.get("/failure", (req, res, next) => {
   res.send({
     isLoggedIn: false,
   });
@@ -31,11 +38,11 @@ router.get('/failure', (req, res, next) => {
 
 ///////// need to have authentication middleware to protect server side
 
-router.get('/exits', (req, res) => {
+router.get("/exits", (req, res) => {
   getInfo(req, res, getExits);
 });
 
-router.post('/exits', (req, res, next) => {
+router.post("/exits", (req, res, next) => {
   const {
     name,
     description,
@@ -66,13 +73,25 @@ router.post('/exits', (req, res, next) => {
   ]);
 });
 
-router.get('/exits/:id', (req, res, next) => {
+router.get("/exits/:id", (req, res, next) => {
   getInfoFromSpecific(req, res, getExitsFromCountry);
-})
+});
 
-router.get('/exit/:id', (req, res, next) => {
+router.get("/exit/:id", (req, res, next) => {
   getInfoFromSpecific(req, res, getExit);
-})
+});
+
+// COMMENTS
+
+router.get("/exits/:id/comments", (req, res, next) => {
+  const exit_id = req.params.id;
+  getInfoFromSpecific(req, res, getComments, [exit_id]);
+});
+
+router.post("/exits/:id/comments", (req, res, next) => {
+  const { text, user_id, exit_id } = req.body.headers;
+  addInfo(req, res, addComment, [text, user_id, exit_id]);
+});
 
 // generic function to return all records from a table
 async function getInfo(req, res, _function) {
@@ -80,7 +99,7 @@ async function getInfo(req, res, _function) {
     const info = await _function();
     res.json(info);
   } catch (err) {
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 }
 
@@ -90,13 +109,13 @@ async function getInfoFromSpecific(req, res, _function) {
     const info = await _function(req.params.id);
     res.json(info);
   } catch (err) {
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 }
 
 // generic function to add data to postgres database
 async function addInfo(req, res, _function, data) {
-  console.log('addInfo is called');
+  console.log("addInfo is called");
   try {
     const info = await _function(data);
     res.json(info);

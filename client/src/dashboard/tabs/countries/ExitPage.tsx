@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import uniqid from "uniqid";
 import {
   Box,
   chakra,
@@ -19,11 +20,14 @@ import {
   ListItem,
   Input,
   Textarea,
+  Grid,
 } from "@chakra-ui/react";
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
+import { format } from "date-fns";
 
 interface Exit {
+  _id: number;
   name: string;
   description: string;
   type: string;
@@ -38,26 +42,47 @@ interface Exit {
   legal: boolean;
 }
 
+interface Comment {
+  created_at?: string;
+  first_name?: string;
+  last_name?: string;
+  text?: string;
+}
+
 function Exit() {
   const [exit, setExit] = useState<Partial<Exit>>({});
+  const [comments, setComments] = useState<Comment[]>([{}]); // how to do this without making interface optional
+  const [commentInput, setCommentInput] = useState("");
 
   const exitURL = "http://localhost:8080/exit";
 
   useEffect(() => {
     getExit(exitURL);
+    getComments(exitURL);
   }, []);
 
-  useEffect(() => {
-    console.log(exit);
-  }, [exit]);
+  // useEffect(() => {
+  //   console.log(exit);
+  // }, [exit]);
 
-  async function getExit(exitsURL: string) {
+  async function getExit(exitURL: string) {
     try {
       const res = await axios.get(`${exitURL}/${localStorage.name}`);
       setExit(res.data[0]);
     } catch (err: any) {
       if (err) {
-        throw err;
+        console.log(err);
+      }
+    }
+  }
+
+  async function getComments(exitURL: string) {
+    try {
+      const res = await axios.get(`${exitURL}s/${localStorage.name}/comments`);
+      setComments(res.data);
+    } catch (err: any) {
+      if (err) {
+        console.log(err);
       }
     }
   }
@@ -79,12 +104,30 @@ function Exit() {
   }
   const lN = legalName();
 
+  async function addComment() {
+    const user_id = localStorage.getItem("user_id");
+    const url = `${exitURL}s/${exit._id}/comments`;
+    try {
+      const res = await axios.post(url, {
+        headers: {
+          text: commentInput,
+          user_id: user_id,
+          exit_id: exit._id,
+        },
+      });
+      getComments(exitURL);
+    } catch (err) {
+      console.log(err);
+    }
+    setCommentInput("");
+  }
+
   return (
     <Container maxW={"7xl"}>
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 18, md: 24 }}
+        py={{ base: 18, md: 5 }}
       >
         <Flex>
           <Image
@@ -192,7 +235,51 @@ function Exit() {
           ></Stack>
         </Stack>
       </SimpleGrid>
-      <Textarea bgColor="white" maxW="50%" />
+      <Grid gridTemplateColumns="1fr 1fr" gap="2em">
+        <Flex direction="column" bg="white" borderRadius="5px">
+          {comments.map((comment) => {
+            return (
+              <Flex
+                key={uniqid()}
+                borderBottom="1px solid black"
+                p="1em"
+                direction="column"
+                gap="2em"
+              >
+                <Box>{comment.text}</Box>
+
+                <Flex justifyContent="space-between" alignItems="end">
+                  <Text fontSize="0.9em">{`${comment.first_name} ${comment.last_name}`}</Text>
+                  <Text color="gray.500">
+                    {comment.created_at
+                      ? format(new Date(comment.created_at), "MMM do, y p")
+                      : null}
+                  </Text>
+                </Flex>
+              </Flex>
+            );
+          })}
+        </Flex>
+        <Flex direction="column" gap="20px">
+          <Textarea
+            bgColor="white"
+            resize="none"
+            value={commentInput}
+            placeholder="Add a comment"
+            onChange={(e: any) => setCommentInput(e.target.value)}
+          />
+          <Button
+            colorScheme="green"
+            maxW="max-content"
+            alignSelf="center"
+            onClick={() => {
+              addComment();
+            }}
+          >
+            Submit
+          </Button>
+        </Flex>
+      </Grid>
     </Container>
   );
 }
