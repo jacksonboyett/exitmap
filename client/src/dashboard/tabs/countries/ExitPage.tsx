@@ -78,7 +78,7 @@ function Exit() {
 
   async function getComments(exitURL: string) {
     try {
-      const res = await axios.get(`${exitURL}s/${localStorage.name}/comments`);
+      const res = await axios.get(`${exitURL}s/${localStorage.name}/comments`); //fix this url
       setComments(res.data);
     } catch (err: any) {
       if (err) {
