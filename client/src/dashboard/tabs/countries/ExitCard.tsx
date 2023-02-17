@@ -93,9 +93,6 @@ function ExitCard(props: Partial<Props>) {
           >
             View Exit
           </Button>
-          <Button variant="ghost" color="green.400">
-            Add to favorites
-          </Button>
         </ButtonGroup>
       </CardFooter>
     </Card>
