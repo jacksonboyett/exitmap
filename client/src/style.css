@@ -2,3 +2,7 @@
 	width: 100%;
 	height: 80vh;
 }
+
+.exit-map-links:hover {
+	text-decoration: underline;
+}

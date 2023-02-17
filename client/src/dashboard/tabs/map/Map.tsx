@@ -17,13 +17,18 @@ const center = {
 
 export default function MyComponent() {
   const [data, setData] = useState<any[]>([]);
-  const [array, setArray] = useState<any[][]>([]);
+  const [activeMarker, setActiveMarker] = useState(0);
+  const navigate = useNavigate();
 
   const exitsURL = 'http://localhost:8080/exits';
 
   useEffect(() => {
     getExits(exitsURL);
   }, []);
+
+  useEffect(() => {
+    console.log(data)
+  }, [data]);
 
   async function getExits(url: string) {
     try {
@@ -36,44 +41,45 @@ export default function MyComponent() {
     }
   }
 
-  useEffect(() => {
-    let latArray = data.map((exit) => {
-      return exit.lat;
-    });
-    let longArray = data.map((exit) => {
-      return exit.long;
-    });
-    let coordArray = [];
-    for (let i = 0; i < latArray.length; i++) {
-      coordArray[i] = [latArray[i], longArray[i]];
-    }
-    setArray(coordArray);
-  }, [data]);
-
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyAW6WMAp0goyYloDiY4mmurvcLjSo3AmHw',
-    libraries: ['geometry', 'drawing'],
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
   });
 
-  useEffect(() => {
-  }, [isLoaded]);
+  const handleActiveMarker = (marker: number) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
+
+  function goToExit(name: string) {
+    localStorage.name = name;
+    navigate(`/dash/exit`)
+  }
 
   if (isLoaded) {
     return (
       <GoogleMap mapContainerClassName='map-container' center={center} zoom={3}>
-        {array.map((coord) => {
+        {data.map((coord) => {
           return (
             <MarkerF
-              key={uniqid()}
-              position={{ lat: coord[0], lng: coord[1] }}
-            />
+              key={coord._id}
+              position={{ lat: coord.lat, lng: coord.long }}
+              onClick={() => handleActiveMarker(coord._id)}
+            >
+              {activeMarker === coord._id ? (
+            <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
+              <div onClick={() => goToExit(coord.name)} className='exit-map-links' >{coord.name}</div>
+            </InfoWindowF>
+          ) : null}
+            </MarkerF>
           );
         })}
         <></>
       </GoogleMap>
     );
   } else {
-    return <div>Loding...</div>;
+    return <div>Loading...</div>;
   }
 }
