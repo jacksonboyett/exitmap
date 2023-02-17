@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter, Image, Stack, Heading, Text, ButtonGroup, Button, Divider, Flex } from '@chakra-ui/react'
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   name: string;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 function ExitCard(props: Partial<Props>) {
+  const navigate = useNavigate();
 
   function legalColor(){
     if (props.legal) {
@@ -30,6 +32,11 @@ function ExitCard(props: Partial<Props>) {
   }
 
   const lN = legalName();
+
+  function goToExit() {
+    localStorage.name = props.name;
+    navigate(`/dash/exit`)
+  }
 
 	return ( 
 		<Card maxW='sm'>
@@ -60,7 +67,7 @@ function ExitCard(props: Partial<Props>) {
   <Divider />
   <CardFooter>
     <ButtonGroup spacing='2'>
-      <Button variant='solid' bg='green.400' color='white'>
+      <Button variant='solid' bg='green.400' color='white' onClick={() => goToExit()}>
         View Exit
       </Button>
       <Button variant='ghost'  color='green.400'>

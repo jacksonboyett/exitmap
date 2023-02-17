@@ -50,8 +50,21 @@ async function getExitsFromCountry(country) {
   })
 }
 
+async function getExit(name) {
+  return new Promise((resolve) => {
+    pool.query("SELECT * FROM exits WHERE name = $1", [name], (err, results) => {
+      console.log(name)
+      if (err) {
+        console.log(err)
+      }
+      resolve(results.rows)
+    })
+  })
+}
+
 module.exports = {
 	addExit,
   getExits, 
-  getExitsFromCountry
+  getExitsFromCountry,
+  getExit
 }

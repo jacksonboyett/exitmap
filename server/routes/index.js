@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 
-const { addExit, getExits, getExitsFromCountry } = require('../controllers/exitController');
+const { addExit, getExits, getExitsFromCountry, getExit } = require('../controllers/exitController');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -68,6 +68,10 @@ router.post('/exits', (req, res, next) => {
 
 router.get('/exits/:id', (req, res, next) => {
   getInfoFromSpecific(req, res, getExitsFromCountry);
+})
+
+router.get('/exit/:id', (req, res, next) => {
+  getInfoFromSpecific(req, res, getExit);
 })
 
 // generic function to return all records from a table

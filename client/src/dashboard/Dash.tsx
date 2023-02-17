@@ -39,6 +39,7 @@ import { useNavigate } from 'react-router-dom';
 import SubmitExit from './tabs/SubmitExit';
 import DashHome from './tabs/DashHome';
 import Exits from './tabs/Exits';
+import Exit from './tabs/countries/ExitPage';
 import Country from './tabs/countries/Country';
 import { Routes, Route } from 'react-router-dom'
 
@@ -85,6 +86,7 @@ export default function SidebarWithHeader({
           <Route path='*' element={<DashHome />} />
           <Route path='exits/*' element={<Exits />} />
           <Route path='country' element={<Country />} />
+          <Route path='exit' element={<Exit />} />
           <Route path='submit' element={<SubmitExit />} />
         </Routes>
       </Box>
