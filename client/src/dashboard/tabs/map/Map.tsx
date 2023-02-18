@@ -6,11 +6,19 @@ import {
   MarkerF,
   InfoWindowF,
   useJsApiLoader,
+  OverlayView,
+  GroundOverlay,
+  Circle,
+  DrawingManager,
+  TransitLayer,
+  MarkerProps,
 } from "@react-google-maps/api";
 import axios, { AxiosResponse } from "axios";
 import uniqid from "uniqid";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Spinner, Button, Flex } from "@chakra-ui/react";
+import { light, dark } from "./MapStyles";
+import { faMapPin } from "@fortawesome/free-solid-svg-icons";
 
 const center = {
   lat: 16,
@@ -27,9 +35,28 @@ interface AddedMarker {
 }
 
 const Map: FC<MapProps> = (props: MapProps) => {
+  const [icon, setIcon] = useState<any>(null);
+
+  const google = window.google;
+  useEffect(() => {
+    if (google != undefined) {
+      setIcon({
+        path: faMapPin.icon[4] as string,
+        fillColor: "#ff173e",
+        fillOpacity: 1,
+        scale: 0.08,
+        anchor: new google.maps.Point(
+          faMapPin.icon[0] / 2, // width
+          faMapPin.icon[1] // height
+        ),
+      });
+    }
+  }, [google]);
+
   const [data, setData] = useState<any[]>([]);
   const [addedMarker, setAddedMarker] = useState<AddedMarker>();
   const [activeMarker, setActiveMarker] = useState(0);
+  const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -104,7 +131,21 @@ const Map: FC<MapProps> = (props: MapProps) => {
         onClick={(e) =>
           e.latLng ? addMarker(e.latLng?.lat(), e.latLng?.lng()) : null
         }
+        options={{ styles: darkMode ? dark : light }}
       >
+        <Button
+          m="10px"
+          position="relative"
+          left="165px"
+          borderRadius="3px"
+          bg={darkMode ? "black" : "white"}
+          color={darkMode ? "#d3a96f" : "gray"}
+          boxShadow="-1px 0px 2px rgba(0,0,0,0.07)"
+          _hover={{ bg: darkMode ? "rgb(40,40,40)" : "rgb(240,240,240)" }}
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          Dark Mode
+        </Button>
         {data.map((coord) => {
           return (
             <MarkerF
@@ -114,22 +155,25 @@ const Map: FC<MapProps> = (props: MapProps) => {
             >
               {activeMarker === coord._id ? (
                 <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
-                  <div
+                  <Flex
                     onClick={() => goToExit(coord._id)}
                     className="exit-map-links"
+                    alignItems="center"
+                    direction="column"
                   >
-                    {coord.name}
-                  </div>
+                    <div>{coord.name}</div>
+                    <div>{`${coord.heightimpact} ft`}</div>
+                  </Flex>
                 </InfoWindowF>
               ) : null}
             </MarkerF>
           );
         })}
-        {addedMarker ? <MarkerF position={addedMarker} /> : null}
+        {addedMarker ? <MarkerF icon={icon} position={addedMarker} /> : null}
       </GoogleMap>
     );
   } else {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 };
 
