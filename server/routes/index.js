@@ -10,6 +10,7 @@ const {
 } = require("../controllers/exitController");
 
 const { addComment, getComments } = require("../controllers/commentController");
+const { addUser } = require("../controllers/authenticationController");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -23,6 +24,16 @@ router.post(
     failureRedirect: "/failure",
   })
 );
+
+router.post("/signup", (req, res, next) => {
+  const {
+    first_name,
+    last_name,
+    email, 
+    password,
+  } = req.body.headers;
+  addInfo(req, res, addUser, [first_name, last_name, email, password]);
+})
 
 router.get("/success", (req, res, next) => {
   res.send({

@@ -76,7 +76,7 @@ const Map: FC<MapProps> = ({}) => {
   const handleMouseDown = (e: any) => {
     clickHoldTimer = setTimeout(() => {
       showCoord(e)
-    }, 1000); //Change 1000 to number of milliseconds required for mouse hold
+    }, 1500); //Change 1000 to number of milliseconds required for mouse hold
   };
 
   const handleMouseUp = () => {

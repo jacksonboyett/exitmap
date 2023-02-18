@@ -13,18 +13,82 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
 import { Link as ReachLink } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios";
+
+type FormData = {
+  first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+}
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
+  const [capState, setCapState] = useState(0)
+  const toast = useToast();
+  const [data, setData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+  })
 
-  function capLog(value: any) {
-    console.log("Captcha value:", value);
+  function handleChange(fields: Partial<FormData>) {
+    setData((prev) => {
+      return { ...prev, ...fields}
+    })
+  }
+
+  function validateRecaptcha(value: any) {
+    setCapState(value);
+  }
+
+  const signupURL = "http://localhost:8080/signup";
+  async function addUser(data: FormData) {
+    if (capState === 0) {
+      toast({
+        title: "ERROR",
+        description: "The recaptcha is invalid.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return
+    } 
+    try {
+      await axios.post(signupURL, {
+        headers: {
+          first_name: data.first_name,
+          last_name: data.last_name,
+          email: data.email,
+          password: data.password,
+        },
+      });
+      toast({
+        title: "Thanks!",
+        description: "We've added you as a new user.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (err) {
+      if (err) {
+        toast({
+          title: "Whoops!",
+          description: "Something went wrong.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      };
+    }
   }
 
   return (
@@ -54,24 +118,24 @@ export default function Signup() {
               <Box>
                 <FormControl id="firstName" isRequired>
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input type="text" onChange={(e) => handleChange({first_name: e.target.value})}/>
                 </FormControl>
               </Box>
               <Box>
                 <FormControl id="lastName">
                   <FormLabel>Last Name</FormLabel>
-                  <Input type="text" />
+                  <Input type="text" onChange={(e) => handleChange({last_name: e.target.value})}/>
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input type="email" onChange={(e) => handleChange({email: e.target.value})}/>
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
+                <Input type={showPassword ? "text" : "password"} onChange={(e) => handleChange({password: e.target.value})} />
                 <InputRightElement h={"full"}>
                   <Button
                     variant={"ghost"}
@@ -84,10 +148,14 @@ export default function Signup() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={capLog} />,
+            <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={validateRecaptcha}/>,
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
+                type="submit"
+                onClick={() => {
+                  addUser(data);
+                }}
                 size="lg"
                 bg={"green.400"}
                 color={"white"}
