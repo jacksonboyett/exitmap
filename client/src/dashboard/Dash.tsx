@@ -41,6 +41,7 @@ import DashHome from './tabs/DashHome';
 import Exits from './tabs/Exits';
 import Exit from './tabs/countries/ExitPage';
 import Country from './tabs/countries/Country';
+import Profile from './profile/Profile';
 import { Routes, Route } from 'react-router-dom'
 
 interface LinkItemProps {
@@ -86,8 +87,9 @@ export default function SidebarWithHeader({
           <Route path='*' element={<DashHome />} />
           <Route path='exits/*' element={<Exits />} />
           <Route path='country/:name' element={<Country />} />
-          <Route path="/exit/:id" element={<Exit />} />
+          <Route path="exit/:id" element={<Exit />} />
           <Route path='submit' element={<SubmitExit />} />
+          <Route path='profile' element={<Profile />} />
         </Routes>
       </Box>
     </Box>
@@ -187,6 +189,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     navigate('/')
   }
 
+  function routeProfile() {
+    navigate('profile')
+  }
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -246,7 +252,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}>
-              <MenuItem>Profile</MenuItem>
+              <MenuItem onClick={routeProfile}>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
