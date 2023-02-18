@@ -18,11 +18,13 @@ import {
   FormHelperText,
   InputRightElement,
   Checkbox,
+  Text,
 } from "@chakra-ui/react";
 
 import { useToast } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Map from "./map/Map"
 
 type FormData = {
   name: string;
@@ -386,6 +388,9 @@ const Form3 = ({
               updateFields({ lat: parseInt(e.target.value) })
             }
           />
+          <FormHelperText>
+          Click and hold the map at a location to get the lat/long.
+        </FormHelperText>
         </FormControl>
 
         <FormControl as={GridItem}>
@@ -489,7 +494,7 @@ export default function Multistep() {
           <Form3 {...data} updateFields={updateFields} />
         )}
         <ButtonGroup mt="5%" w="100%">
-          <Flex w="100%" justifyContent="space-between">
+          <Flex w="100%" justifyContent="space-between" >
             <Flex>
               <Button
                 onClick={() => {
@@ -543,6 +548,7 @@ export default function Multistep() {
           </Flex>
         </ButtonGroup>
       </Box>
-    </>
+      <Map />
+      </>
   );
 }
