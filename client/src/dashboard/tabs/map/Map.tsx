@@ -33,7 +33,7 @@ interface AddedMarker {
   lat: number;
   lng: number;
 }
-
+//test
 const Map: FC<MapProps> = (props: MapProps) => {
   const [icon, setIcon] = useState<any>(null);
 
