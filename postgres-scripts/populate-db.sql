@@ -100,7 +100,7 @@ values
 	),
 	(
 		'Icon Apartments',
-		'This is a fun but sketchy building jump in Buckhead. Only jump this object in the early morning when people are not awake. Access to the building can most likely be got through the parking deck. Land on the parking deck adjacent to the building.', 		
+		'This is a fun but sketchy building jump in Buckhead. Only jump this object in the early morning when people are not awake. Access to the building can most likely be got through the parking deck. Land on the parking deck adjacent to the building.',
 		'Building',
 		419,
 		370,
@@ -111,18 +111,49 @@ values
 		'United States',
 		'https://image1.apartmentfinder.com/i2/FNfKeTxDHdwNA-oJbtp0hD_S5q3VxjnI8hllR_f7USg/111/icon-buckhead-atlanta-ga-highway-access.jpg',
 		'0'
+	),
+	(
+		'Pedra de Gavea',
+		'This is without a doubt one of the most beautiful jumps in the world. Climb up one of Rios highest mountains in a cloud forest and land on a pristine beach with acai and beer.',
+		'Earth',
+		600,
+		3000,
+		-22.996962,
+		-43.284584,
+		'Rio de Janeiro',
+		'Southeast',
+		'Brazil',
+		'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Nebulosa_Pedra_da_G%C3%A1vea.jpg/1200px-Nebulosa_Pedra_da_G%C3%A1vea.jpg',
+		'1'
+	),
+	(
+		'Yellow Ocean',
+		'This is a beginner object in the Lauterbrunnen Valley. It is only a short 15 minute hike from when you get off then train at the top of the valley. Please make sure to call the air traffic controller before you jump.',
+		'Earth',
+		1140,
+		1390,
+		45.577812,
+		7.918514,
+		'Lauterbrunnen',
+		'',
+		'Switzerland',
+		'https://static.wixstatic.com/media/c40a48_87b4168c50074814957709bc3465de69~mv2.jpeg/v1/fill/w_2500,h_1633,al_c/c40a48_87b4168c50074814957709bc3465de69~mv2.jpeg',
+		'1'
 	);
-	
 
-insert into comments (text, user_id, exit_id) values 
-('This is a message on exit 1 made by user 1', 1, 1),
-('Cant wait to jump this one again!!', 4, 1),
-('Had a great time on this one!!', 1, 3),
-('Hell yeah- first comment!!!', 2, 2),
-('Been trying to jump this one for years now!!', 3, 4);
-
-
-
-
-
-
+insert into
+	comments (text, user_id, exit_id)
+values
+	(
+		'This is a message on exit 1 made by user 1',
+		1,
+		1
+	),
+	('Cant wait to jump this one again!!', 4, 1),
+	('Had a great time on this one!!', 1, 3),
+	('Hell yeah- first comment!!!', 2, 2),
+	(
+		'Been trying to jump this one for years now!!',
+		3,
+		4
+	);
