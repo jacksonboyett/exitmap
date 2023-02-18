@@ -20,13 +20,13 @@ import {
   Checkbox,
   Text,
 } from "@chakra-ui/react";
-
+import FileInputCard from "../../components/FileInputCard";
 import { useToast } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Map from "./map/Map"
+import Map from "./map/Map";
 
-type FormData = {
+type CustomFormData = {
   name: string;
   description: string;
   type: string;
@@ -41,7 +41,7 @@ type FormData = {
   legal: boolean;
 };
 
-const INITIAL_DATA: FormData = {
+const INITIAL_DATA: CustomFormData = {
   name: "",
   description: "",
   type: "",
@@ -67,6 +67,11 @@ type Form1Props = Form1Data & {
   updateFields: (fields: Partial<Form1Data>) => void;
 };
 
+interface File {
+  key: string;
+  size: number;
+}
+
 const Form1 = ({
   name,
   type,
@@ -74,6 +79,21 @@ const Form1 = ({
   image,
   updateFields,
 }: Form1Props) => {
+  const [imageData, setImageData] = useState<FormData>();
+  const [files, setFiles] = useState<File[]>();
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  // need to fix imageData persisting through form
+
+  async function handleDrop(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    updateFields({ image: e.dataTransfer.files[0].name });
+    const imgData = new FormData();
+    imgData.append("file", e.dataTransfer.files[0]);
+    setImageData(imgData);
+  }
+
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
@@ -107,15 +127,45 @@ const Form1 = ({
           </Select>
         </FormControl>
       </Flex>
+
       <FormControl mr="5%">
-        <FormLabel htmlFor="name" fontWeight={"normal"}>
-          Image link
+        <FormLabel htmlFor="image" fontWeight={"normal"} mt="10px">
+          Object Image
         </FormLabel>
         <Input
-          id="name"
-          value={image}
-          onChange={(e) => updateFields({ image: e.target.value })}
+          id="image"
+          type="file"
+          display="none"
+          ref={fileInput}
+          onChange={(e: any) => {
+            updateFields({ image: e.target.files[0].name });
+            const imgData = new FormData();
+            imgData.append("image", e.target.files[0]);
+            setImageData(imgData);
+          }}
         />
+        <Flex
+          className="input-box"
+          alignItems="center"
+          onDrop={(e) => {
+            handleDrop(e);
+          }}
+          borderRadius="5px"
+          border="1px solid #E2E8F0"
+          pl="1em"
+        >
+          {<div>{image}</div>}
+          <Button
+            type={"button"}
+            colorScheme={"green"}
+            onClick={() => {
+              if (fileInput.current) fileInput.current.click();
+            }}
+            ml="auto"
+          >
+            Choose File
+          </Button>
+        </Flex>
       </FormControl>
       <FormControl mt="2%">
         <FormLabel htmlFor="description" fontWeight={"normal"}>
@@ -376,7 +426,6 @@ const Form3 = ({
             name="lat"
             max="90"
             min="-90"
-            isInvalid={true}
             id="lat"
             focusBorderColor="brand.400"
             shadow="sm"
@@ -389,8 +438,8 @@ const Form3 = ({
             }
           />
           <FormHelperText>
-          Click and hold the map at a location to get the lat/long.
-        </FormHelperText>
+            Click the map at a location to set the lat/long.
+          </FormHelperText>
         </FormControl>
 
         <FormControl as={GridItem}>
@@ -432,7 +481,7 @@ const Form3 = ({
 
 const exitsURL = "http://localhost:8080/exits";
 
-async function addExit(data: FormData) {
+async function addExit(data: CustomFormData) {
   console.log("Exit axios post");
   try {
     await axios.post(exitsURL, {
@@ -462,7 +511,7 @@ export default function Multistep() {
   const [progress, setProgress] = useState<number>(33.33);
   const [data, setData] = useState(INITIAL_DATA);
 
-  function updateFields(fields: Partial<FormData>) {
+  function updateFields(fields: Partial<CustomFormData>) {
     setData((prev) => {
       return { ...prev, ...fields };
     });
@@ -494,7 +543,7 @@ export default function Multistep() {
           <Form3 {...data} updateFields={updateFields} />
         )}
         <ButtonGroup mt="5%" w="100%">
-          <Flex w="100%" justifyContent="space-between" >
+          <Flex w="100%" justifyContent="space-between">
             <Flex>
               <Button
                 onClick={() => {
@@ -548,7 +597,12 @@ export default function Multistep() {
           </Flex>
         </ButtonGroup>
       </Box>
-      <Map />
-      </>
+      <Map
+        updateForm={(lat: number, lng: number) => {
+          updateFields({ lat: lat });
+          updateFields({ long: lng });
+        }}
+      />
+    </>
   );
 }

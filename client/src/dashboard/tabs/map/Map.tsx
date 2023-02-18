@@ -2,6 +2,7 @@ import React, { useState, useEffect, FC } from "react";
 import {
   GoogleMap,
   LoadScript,
+  Marker,
   MarkerF,
   InfoWindowF,
   useJsApiLoader,
@@ -16,10 +17,18 @@ const center = {
   lng: -80,
 };
 
-interface MapProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface MapProps extends React.HTMLAttributes<HTMLDivElement> {
+  updateForm?: Function;
+}
 
-const Map: FC<MapProps> = ({}) => {
+interface AddedMarker {
+  lat: number;
+  lng: number;
+}
+
+const Map: FC<MapProps> = (props: MapProps) => {
   const [data, setData] = useState<any[]>([]);
+  const [addedMarker, setAddedMarker] = useState<AddedMarker>();
   const [activeMarker, setActiveMarker] = useState(0);
   const navigate = useNavigate();
   const toast = useToast();
@@ -29,10 +38,6 @@ const Map: FC<MapProps> = ({}) => {
   useEffect(() => {
     getExits(exitsURL);
   }, []);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   async function getExits(url: string) {
     try {
@@ -71,12 +76,17 @@ const Map: FC<MapProps> = ({}) => {
     });
   }
 
+  function addMarker(lat: number, lng: number) {
+    setAddedMarker({ lat: lat, lng: lng });
+    if (props.updateForm) props.updateForm(lat, lng);
+  }
+
   let clickHoldTimer: any;
 
   const handleMouseDown = (e: any) => {
     clickHoldTimer = setTimeout(() => {
-      showCoord(e)
-    }, 1500); //Change 1000 to number of milliseconds required for mouse hold
+      showCoord(e);
+    }, 1000); //Change 1000 to number of milliseconds required for mouse hold
   };
 
   const handleMouseUp = () => {
@@ -91,6 +101,9 @@ const Map: FC<MapProps> = ({}) => {
         zoom={3}
         onMouseDown={(e) => handleMouseDown(e)}
         onMouseUp={handleMouseUp}
+        onClick={(e) =>
+          e.latLng ? addMarker(e.latLng?.lat(), e.latLng?.lng()) : null
+        }
       >
         {data.map((coord) => {
           return (
@@ -112,12 +125,12 @@ const Map: FC<MapProps> = ({}) => {
             </MarkerF>
           );
         })}
-        <></>
+        {addedMarker ? <MarkerF position={addedMarker} /> : null}
       </GoogleMap>
     );
   } else {
     return <div>Loading...</div>;
   }
-}
+};
 
 export default Map;

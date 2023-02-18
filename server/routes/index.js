@@ -26,14 +26,9 @@ router.post(
 );
 
 router.post("/signup", (req, res, next) => {
-  const {
-    first_name,
-    last_name,
-    email, 
-    password,
-  } = req.body.headers;
+  const { first_name, last_name, email, password } = req.body.headers;
   addInfo(req, res, addUser, [first_name, last_name, email, password]);
-})
+});
 
 router.get("/success", (req, res, next) => {
   res.send({
@@ -89,7 +84,7 @@ router.get("/exits/:id", (req, res, next) => {
 });
 
 router.get("/exit/:id", (req, res, next) => {
-  console.log(req.params.id);
+  console.log(req.params);
   getInfoFromSpecific(req, res, getExit);
 });
 
@@ -99,10 +94,12 @@ router.get("/exits/:id/comments", (req, res, next) => {
   const exit_id = req.params.id;
   getInfoFromSpecific(req, res, getComments, [exit_id]);
 });
-
 router.post("/exits/:id/comments", (req, res, next) => {
   const { text, user_id, exit_id } = req.body.headers;
   addInfo(req, res, addComment, [text, user_id, exit_id]);
+});
+router.put("/exits/:id/comments/:comment_id", (req, res) => {
+  console.log(req.params);
 });
 
 // generic function to return all records from a table

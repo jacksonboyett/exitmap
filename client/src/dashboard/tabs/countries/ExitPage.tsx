@@ -26,6 +26,7 @@ import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+import Comment from "../../../components/Comment";
 
 interface Exit {
   _id: number;
@@ -44,25 +45,28 @@ interface Exit {
 }
 
 interface Comment {
-  created_at?: string;
-  first_name?: string;
-  last_name?: string;
-  text?: string;
+  _id: string;
+  created_at: string;
+  first_name: string;
+  last_name: string;
+  text: string;
+  user_id: string;
+  exit_id: string;
 }
 
 function Exit() {
   const [exit, setExit] = useState<Partial<Exit>>({});
-  const [comments, setComments] = useState<Comment[]>([{}]); // how to do this without making interface optional
+  const [comments, setComments] = useState<Comment[]>(); // how to do this without making interface optional
   const [commentInput, setCommentInput] = useState("");
 
-  const exitURL = "http://localhost:8080/exit";
+  let { id } = useParams();
+
+  const exitURL = `http://localhost:8080/exit`;
 
   useEffect(() => {
     getExit(exitURL);
     getComments(exitURL);
   }, []);
-
-  let { id } = useParams();
 
   async function getExit(exitURL: string) {
     try {
@@ -218,7 +222,7 @@ function Exit() {
         </Flex>
       </SimpleGrid>
       <Grid gridTemplateColumns="1fr 1fr" gap="2em">
-      <Flex direction="column" gap="20px">
+        <Flex direction="column" gap="20px">
           <Textarea
             bgColor="white"
             resize="none"
@@ -238,28 +242,11 @@ function Exit() {
           </Button>
         </Flex>
         <Flex direction="column" bg="white" borderRadius="5px">
-          {comments.map((comment) => {
-            return (
-              <Flex
-                key={uniqid()}
-                borderBottom="1px solid black"
-                p="1em"
-                direction="column"
-                gap="2em"
-              >
-                <Box>{comment.text}</Box>
-
-                <Flex justifyContent="space-between" alignItems="end">
-                  <Text fontSize="0.9em">{`${comment.first_name} ${comment.last_name}`}</Text>
-                  <Text color="gray.500">
-                    {comment.created_at
-                      ? format(new Date(comment.created_at), "MMM do, y p")
-                      : null}
-                  </Text>
-                </Flex>
-              </Flex>
-            );
-          })}
+          {comments && comments.length > 0
+            ? comments.map((comment) => {
+                return <Comment key={uniqid()} comment={comment}></Comment>;
+              })
+            : null}
         </Flex>
       </Grid>
     </Container>

@@ -18,7 +18,7 @@ async function addComment([text, user_id, exit_id]) {
 async function getComments(exit_id) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `select text, comments.created_at, users.first_name, users.last_name
+      `select text, comments.created_at, comments.user_id, comments.exit_id, users.first_name, users.last_name
       from exits
       inner join comments
       on exit_id = exits._id

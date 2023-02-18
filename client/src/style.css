@@ -1,12 +1,26 @@
 .map-container {
-	width: 100%;
-	height: 80vh;
+  width: 100%;
+  height: 80vh;
 }
 
 .exit-map-links:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .logo:hover {
-	cursor: pointer;
+  cursor: pointer;
+}
+
+.onclick-icon {
+  transition: all 0.2s ease;
+}
+.onclick-icon > path {
+  transition: all 0.2s ease;
+}
+.onclick-icon:hover {
+  transform-origin: center;
+  transform: scale(1.1);
+}
+.onclick-icon:hover > path {
+  color: #d2a96e;
 }

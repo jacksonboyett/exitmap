@@ -63,7 +63,17 @@ export default function SidebarWithHeader({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+    <Box
+      minH="100vh"
+      bg={useColorModeValue("gray.100", "gray.900")}
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+      }}
+    >
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
@@ -238,7 +248,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             size={"sm"}
             src={"https://bi.im-g.pl/im/8/9289/z9289078Q.jpg"}
             onClick={routeProfile}
-            cursor='pointer'
+            cursor="pointer"
           />
           <Menu>
             <MenuButton
