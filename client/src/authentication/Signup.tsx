@@ -13,35 +13,42 @@ import {
   Heading,
   Text,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { NavLink } from 'react-router-dom';
-import { Link as ReachLink } from 'react-router-dom';
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { NavLink } from "react-router-dom";
+import { Link as ReachLink } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
 
+  function capLog(value: any) {
+    console.log("Captcha value:", value);
+  }
+
   return (
     <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'} textAlign={'center'}>
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
           </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
+          <Text fontSize={"lg"} color={"gray.600"}>
             for unlimited access to exit data from around the world!
           </Text>
         </Stack>
         <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}>
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
+          p={8}
+        >
           <Stack spacing={4}>
             <HStack>
               <Box>
@@ -64,34 +71,40 @@ export default function Signup() {
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'} />
-                <InputRightElement h={'full'}>
+                <Input type={showPassword ? "text" : "password"} />
+                <InputRightElement h={"full"}>
                   <Button
-                    variant={'ghost'}
+                    variant={"ghost"}
                     onClick={() =>
                       setShowPassword((showPassword) => !showPassword)
-                    }>
+                    }
+                  >
                     {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={capLog} />,
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
                 size="lg"
-                bg={'green.400'}
-                color={'white'}
+                bg={"green.400"}
+                color={"white"}
                 _hover={{
-                  bg: 'green.500',
-                }}>
+                  bg: "green.500",
+                }}
+              >
                 Sign up
               </Button>
             </Stack>
             <Stack pt={6}>
-              <Text align={'center'}>
-                Already a user? 
-                <Link as={ReachLink} to='/login' color={'green.400'}> Login</Link>
+              <Text align={"center"}>
+                Already a user?
+                <Link as={ReachLink} to="/login" color={"green.400"}>
+                  {" "}
+                  Login
+                </Link>
               </Text>
             </Stack>
           </Stack>
