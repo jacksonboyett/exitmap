@@ -25,7 +25,7 @@ import {
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
 import { format } from "date-fns";
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
 
 interface Exit {
   _id: number;
