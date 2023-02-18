@@ -128,17 +128,6 @@ function Exit() {
         spacing={{ base: 8, md: 10 }}
         py={{ base: 18, md: 5 }}
       >
-        <Flex>
-          <Image
-            rounded={"md"}
-            alt={"product image"}
-            src={exit.image}
-            fit={"cover"}
-            align={"center"}
-            w={"100%"}
-            h={{ base: "100%", sm: "400px", lg: "500px" }}
-          />
-        </Flex>
         <Stack spacing={{ base: 6, md: 10 }}>
           <Box as={"header"}>
             <Heading
@@ -216,8 +205,38 @@ function Exit() {
             justifyContent={"center"}
           ></Stack>
         </Stack>
+        <Flex>
+          <Image
+            rounded={"md"}
+            alt={"product image"}
+            src={exit.image}
+            fit={"cover"}
+            align={"center"}
+            w={"100%"}
+            h={{ base: "100%", sm: "400px", lg: "500px" }}
+          />
+        </Flex>
       </SimpleGrid>
       <Grid gridTemplateColumns="1fr 1fr" gap="2em">
+      <Flex direction="column" gap="20px">
+          <Textarea
+            bgColor="white"
+            resize="none"
+            value={commentInput}
+            placeholder="Add a comment"
+            onChange={(e: any) => setCommentInput(e.target.value)}
+          />
+          <Button
+            colorScheme="green"
+            maxW="max-content"
+            alignSelf="center"
+            onClick={() => {
+              addComment();
+            }}
+          >
+            Submit
+          </Button>
+        </Flex>
         <Flex direction="column" bg="white" borderRadius="5px">
           {comments.map((comment) => {
             return (
@@ -241,25 +260,6 @@ function Exit() {
               </Flex>
             );
           })}
-        </Flex>
-        <Flex direction="column" gap="20px">
-          <Textarea
-            bgColor="white"
-            resize="none"
-            value={commentInput}
-            placeholder="Add a comment"
-            onChange={(e: any) => setCommentInput(e.target.value)}
-          />
-          <Button
-            colorScheme="green"
-            maxW="max-content"
-            alignSelf="center"
-            onClick={() => {
-              addComment();
-            }}
-          >
-            Submit
-          </Button>
         </Flex>
       </Grid>
     </Container>
