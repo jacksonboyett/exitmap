@@ -6,38 +6,52 @@ import {
   MarkerF,
   InfoWindowF,
   useJsApiLoader,
-  OverlayView,
-  GroundOverlay,
-  Circle,
-  DrawingManager,
-  TransitLayer,
-  MarkerProps,
+  StandaloneSearchBox,
+  DirectionsRenderer,
+  DirectionsRendererProps,
+  DirectionsService,
+  useLoadScript,
 } from "@react-google-maps/api";
 import axios, { AxiosResponse } from "axios";
 import uniqid from "uniqid";
 import { useNavigate } from "react-router-dom";
-import { useToast, Spinner, Button, Flex } from "@chakra-ui/react";
+import { useToast, Spinner, Button, Flex, Box, border } from "@chakra-ui/react";
 import { light, dark } from "./MapStyles";
 import { faMapPin } from "@fortawesome/free-solid-svg-icons";
+import OnClickIcon from "../../../components/OnClickIcon";
+import { mdiDirections } from "@mdi/js";
 
-const center = {
-  lat: 16,
-  lng: -80,
-};
-
-interface MapProps extends React.HTMLAttributes<HTMLDivElement> {
-  updateForm?: Function;
-}
-
-interface AddedMarker {
+interface Coordinates {
   lat: number;
   lng: number;
 }
-//test
-const Map: FC<MapProps> = (props: MapProps) => {
-  const [icon, setIcon] = useState<any>(null);
 
+type Libraries = (
+  | "drawing"
+  | "geometry"
+  | "localContext"
+  | "places"
+  | "visualization"
+)[];
+
+interface MapProps extends React.HTMLAttributes<HTMLDivElement> {
+  updateForm?: Function;
+  libraries?: Libraries;
+}
+
+const Map: FC<MapProps> = (props: MapProps) => {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
+    libraries: props.libraries,
+  });
   const google = window.google;
+  interface SearchBox extends google.maps.places.SearchBox {}
+  type DirectionsResult = google.maps.DirectionsResult;
+
+  const [icon, setIcon] = useState<any>(null);
+  const [searchBox, setSearchBox] = useState<SearchBox>();
+  const [directions, setDirections] = useState<DirectionsResult>();
+
   useEffect(() => {
     if (google != undefined) {
       setIcon({
@@ -54,9 +68,11 @@ const Map: FC<MapProps> = (props: MapProps) => {
   }, [google]);
 
   const [data, setData] = useState<any[]>([]);
-  const [addedMarker, setAddedMarker] = useState<AddedMarker>();
+  const [addedMarker, setAddedMarker] = useState<Coordinates>();
   const [activeMarker, setActiveMarker] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+  const [center, setCenter] = useState<Coordinates>({ lat: 16, lng: -80 });
+  const [zoom, setZoom] = useState<number>(6);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -64,6 +80,14 @@ const Map: FC<MapProps> = (props: MapProps) => {
 
   useEffect(() => {
     getExits(exitsURL);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (res) => {
+          setCenter({ lat: res.coords.latitude, lng: res.coords.longitude });
+        },
+        (err) => setZoom(3)
+      );
+    }
   }, []);
 
   async function getExits(url: string) {
@@ -77,10 +101,10 @@ const Map: FC<MapProps> = (props: MapProps) => {
     }
   }
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-  });
+  // const { isLoaded } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
+  // });
 
   const handleActiveMarker = (marker: number) => {
     if (marker === activeMarker) {
@@ -120,57 +144,100 @@ const Map: FC<MapProps> = (props: MapProps) => {
     clearTimeout(clickHoldTimer);
   };
 
+  function getDirections(lat: number, lng: number) {
+    const service = new google.maps.DirectionsService();
+    service.route(
+      {
+        origin: new google.maps.LatLng(center.lat, center.lng),
+        destination: new google.maps.LatLng(lat, lng),
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirections(result);
+        }
+      }
+    );
+  }
+
   if (isLoaded) {
     return (
-      <GoogleMap
-        mapContainerClassName="map-container"
-        center={center}
-        zoom={3}
-        onMouseDown={(e) => handleMouseDown(e)}
-        onMouseUp={handleMouseUp}
-        onClick={(e) =>
-          e.latLng ? addMarker(e.latLng?.lat(), e.latLng?.lng()) : null
-        }
-        options={{ styles: darkMode ? dark : light }}
-      >
-        <Button
-          m="10px"
-          position="relative"
-          left="165px"
-          borderRadius="3px"
-          bg={darkMode ? "black" : "white"}
-          color={darkMode ? "#d3a96f" : "gray"}
-          boxShadow="-1px 0px 2px rgba(0,0,0,0.07)"
-          _hover={{ bg: darkMode ? "rgb(40,40,40)" : "rgb(240,240,240)" }}
-          onClick={() => setDarkMode(!darkMode)}
+      <>
+        <StandaloneSearchBox
+          onPlacesChanged={() => {
+            if (searchBox) {
+              const searchResults = searchBox.getPlaces();
+              if (searchResults && searchResults.length > 0) {
+                const lat = searchResults[0].geometry?.location?.lat();
+                const lng = searchResults[0].geometry?.location?.lng();
+                if (lat && lng) {
+                  setCenter({ lat: lat, lng: lng });
+                  setZoom(8);
+                }
+              }
+            }
+          }}
+          onLoad={(ref) => setSearchBox(ref)}
         >
-          Dark Mode
-        </Button>
-        {data.map((coord) => {
-          return (
-            <MarkerF
-              key={coord._id}
-              position={{ lat: coord.lat, lng: coord.long }}
-              onClick={() => handleActiveMarker(coord._id)}
-            >
-              {activeMarker === coord._id ? (
-                <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
-                  <Flex
-                    onClick={() => goToExit(coord._id)}
-                    className="exit-map-links"
-                    alignItems="center"
-                    direction="column"
-                  >
-                    <div>{coord.name}</div>
-                    <div>{`${coord.heightimpact} ft`}</div>
-                  </Flex>
-                </InfoWindowF>
-              ) : null}
-            </MarkerF>
-          );
-        })}
-        {addedMarker ? <MarkerF icon={icon} position={addedMarker} /> : null}
-      </GoogleMap>
+          <input type="text" />
+        </StandaloneSearchBox>
+        <GoogleMap
+          mapContainerClassName="map-container"
+          center={center}
+          zoom={zoom}
+          onMouseDown={(e) => handleMouseDown(e)}
+          onMouseUp={handleMouseUp}
+          onClick={(e) => {
+            if (e.latLng) addMarker(e.latLng?.lat(), e.latLng?.lng());
+          }}
+          options={{ styles: darkMode ? dark : light, backgroundColor: "gray" }}
+        >
+          <Button
+            m="10px"
+            position="relative"
+            left="165px"
+            borderRadius="3px"
+            bg={darkMode ? "black" : "white"}
+            color={darkMode ? "#d3a96f" : "gray"}
+            boxShadow="-1px 0px 2px rgba(0,0,0,0.07)"
+            _hover={{ bg: darkMode ? "rgb(40,40,40)" : "rgb(240,240,240)" }}
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            Dark Mode
+          </Button>
+          {directions ? <DirectionsRenderer directions={directions} /> : null}
+          {data.map((coord) => {
+            return (
+              <MarkerF
+                key={coord._id}
+                position={{ lat: coord.lat, lng: coord.long }}
+                onClick={() => handleActiveMarker(coord._id)}
+              >
+                {activeMarker === coord._id ? (
+                  <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
+                    <Flex gap="5px" alignItems="center">
+                      <Flex
+                        onClick={() => goToExit(coord._id)}
+                        className="exit-map-links"
+                        direction="column"
+                      >
+                        <div>{coord.name}</div>
+                        <div>{`${coord.heightimpact} ft`}</div>
+                      </Flex>
+                      <OnClickIcon
+                        path={mdiDirections}
+                        size={1}
+                        onClick={() => getDirections(coord.lat, coord.long)}
+                      />
+                    </Flex>
+                  </InfoWindowF>
+                ) : null}
+              </MarkerF>
+            );
+          })}
+          {addedMarker ? <MarkerF icon={icon} position={addedMarker} /> : null}
+        </GoogleMap>
+      </>
     );
   } else {
     return <Spinner />;
