@@ -161,26 +161,24 @@ const Map: FC<MapProps> = (props: MapProps) => {
   if (isLoaded) {
     return (
       <>
-        {false ? (
-          <StandaloneSearchBox
-          // onPlacesChanged={() => {
-          //   if (searchBox) {
-          //     const searchResults = searchBox.getPlaces();
-          //     if (searchResults && searchResults.length > 0) {
-          //       const lat = searchResults[0].geometry?.location?.lat();
-          //       const lng = searchResults[0].geometry?.location?.lng();
-          //       if (lat && lng) {
-          //         setCenter({ lat: lat, lng: lng });
-          //         setZoom(8);
-          //       }
-          //     }
-          //   }
-          // }}
-          // onLoad={(ref) => setSearchBox(ref)}
-          >
-            <input type="text" />
-          </StandaloneSearchBox>
-        ) : null}
+        <StandaloneSearchBox
+          onPlacesChanged={() => {
+            if (searchBox) {
+              const searchResults = searchBox.getPlaces();
+              if (searchResults && searchResults.length > 0) {
+                const lat = searchResults[0].geometry?.location?.lat();
+                const lng = searchResults[0].geometry?.location?.lng();
+                if (lat && lng) {
+                  setCenter({ lat: lat, lng: lng });
+                  setZoom(8);
+                }
+              }
+            }
+          }}
+          onLoad={(ref) => setSearchBox(ref)}
+        >
+          <input type="text" />
+        </StandaloneSearchBox>
         <GoogleMap
           mapContainerClassName="map-container"
           center={center}
