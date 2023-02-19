@@ -34,16 +34,13 @@ type Libraries = (
   | "visualization"
 )[];
 
+const libraries = ["places"] as Libraries;
+
 interface MapProps extends React.HTMLAttributes<HTMLDivElement> {
   updateForm?: Function;
-  libraries?: Libraries;
 }
 
 const Map: FC<MapProps> = (props: MapProps) => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-    libraries: props.libraries,
-  });
   const google = window.google;
   interface SearchBox extends google.maps.places.SearchBox {}
   type DirectionsResult = google.maps.DirectionsResult;
@@ -101,10 +98,11 @@ const Map: FC<MapProps> = (props: MapProps) => {
     }
   }
 
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "google-map-script",
-  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-  // });
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
+    libraries: libraries,
+  });
 
   const handleActiveMarker = (marker: number) => {
     if (marker === activeMarker) {
@@ -163,24 +161,26 @@ const Map: FC<MapProps> = (props: MapProps) => {
   if (isLoaded) {
     return (
       <>
-        <StandaloneSearchBox
-          onPlacesChanged={() => {
-            if (searchBox) {
-              const searchResults = searchBox.getPlaces();
-              if (searchResults && searchResults.length > 0) {
-                const lat = searchResults[0].geometry?.location?.lat();
-                const lng = searchResults[0].geometry?.location?.lng();
-                if (lat && lng) {
-                  setCenter({ lat: lat, lng: lng });
-                  setZoom(8);
-                }
-              }
-            }
-          }}
-          onLoad={(ref) => setSearchBox(ref)}
-        >
-          <input type="text" />
-        </StandaloneSearchBox>
+        {false ? (
+          <StandaloneSearchBox
+          // onPlacesChanged={() => {
+          //   if (searchBox) {
+          //     const searchResults = searchBox.getPlaces();
+          //     if (searchResults && searchResults.length > 0) {
+          //       const lat = searchResults[0].geometry?.location?.lat();
+          //       const lng = searchResults[0].geometry?.location?.lng();
+          //       if (lat && lng) {
+          //         setCenter({ lat: lat, lng: lng });
+          //         setZoom(8);
+          //       }
+          //     }
+          //   }
+          // }}
+          // onLoad={(ref) => setSearchBox(ref)}
+          >
+            <input type="text" />
+          </StandaloneSearchBox>
+        ) : null}
         <GoogleMap
           mapContainerClassName="map-container"
           center={center}
