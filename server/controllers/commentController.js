@@ -1,7 +1,7 @@
 const { pool } = require("../pool-config.js");
 
 async function addComment([text, user_id, exit_id]) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     pool.query(
       "INSERT INTO comments(text, user_id, exit_id) values ($1, $2, $3)",
       [text, user_id, exit_id],

@@ -72,7 +72,6 @@ const Map: FC<MapProps> = (props: MapProps) => {
   const [zoom, setZoom] = useState<number>(6);
   const navigate = useNavigate();
   const toast = useToast();
-
   const exitsURL = "http://localhost:8080/exits";
 
   useEffect(() => {
@@ -128,6 +127,10 @@ const Map: FC<MapProps> = (props: MapProps) => {
   function addMarker(lat: number, lng: number) {
     setAddedMarker({ lat: lat, lng: lng });
     if (props.updateForm) props.updateForm(lat, lng);
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ location: { lat: lat, lng: lng } }, (results) => {
+      if (results && results[0]) console.log(results[0]);
+    });
   }
 
   let clickHoldTimer: any;
@@ -186,7 +189,9 @@ const Map: FC<MapProps> = (props: MapProps) => {
           onMouseDown={(e) => handleMouseDown(e)}
           onMouseUp={handleMouseUp}
           onClick={(e) => {
-            if (e.latLng) addMarker(e.latLng?.lat(), e.latLng?.lng());
+            if (e.latLng) {
+              addMarker(e.latLng.lat(), e.latLng.lng());
+            }
           }}
           options={{ styles: darkMode ? dark : light, backgroundColor: "gray" }}
         >
